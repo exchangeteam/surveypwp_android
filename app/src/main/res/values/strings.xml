@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SurveyPWP</string>
+    <string name="app_btnPlatform">Go to Questionnaire Platform</string>
 </resources>

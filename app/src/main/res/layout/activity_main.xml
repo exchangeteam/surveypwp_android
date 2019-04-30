@@ -1,36 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/tv_welcomeText"
+    <LinearLayout
+        android:id="@+id/layout_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marginL"
-        android:gravity="center_horizontal"
-        android:text="@string/app_name"
-        android:textSize="@dimen/appNameTextSize"
-        fontPath="fonts/IndieFlower.ttf" />
+        android:layout_marginBottom="@dimen/marginXXL"
+        android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/lv_listQuestionnaire"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marginL" />
+        <TextView
+            android:id="@+id/tv_welcomeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:gravity="center_horizontal"
+            android:text="@string/app_name"
+            android:textSize="@dimen/appNameTextSize"
+            fontPath="fonts/IndieFlower.ttf" />
+
+        <ListView
+            android:id="@+id/lv_listQuestionnaire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_platform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginL"
-        android:layout_marginBottom="@dimen/marginL"
-        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/marginM"
+        android:layout_marginStart="@dimen/marginS"
+        android:layout_marginEnd="@dimen/marginS"
+        android:layout_alignBottom="@+id/layout_app"
+        android:layout_alignParentBottom="true"
         android:text="@string/app_btnPlatform" />
 
-</LinearLayout>
+</RelativeLayout>

@@ -30,12 +30,8 @@ public class QuestionnaireAdapter extends ArrayAdapter<ModelQuestionnaire> {
      * All components are constructed.
      */
     static class ViewHolder {
-        @BindView(R.id.tv_allQuestionnaireTitle)
-        TextView tvTitle;
-        @BindView(R.id.tv_allQuestionnaireDescription)
-        TextView tvDescription;
-        @BindView(R.id.tv_allQuestionnaireID)
-        TextView tvID;
+        @BindView(R.id.tv_allQuestionnaireTitle) TextView tvTitle;
+        @BindView(R.id.tv_allQuestionnaireDescription) TextView tvDescription;
 
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -98,13 +94,15 @@ public class QuestionnaireAdapter extends ArrayAdapter<ModelQuestionnaire> {
      */
     private void setViewContent(ViewHolder viewHolder, final ModelQuestionnaire questionnaire) {
         if (questionnaire != null) {
-            String title = questionnaire.getTitle();
+            String title = questionnaire.getTitle() + " (ID: " + String.valueOf(questionnaire.getId()) + ")";
             String description = questionnaire.getDescription();
-            String ID = String.valueOf(questionnaire.getId());
+
+            if(description == null) {
+                description = "No description provided.";
+            }
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
-            viewHolder.tvID.setText(ID);
         }
     }
 }

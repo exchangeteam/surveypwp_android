@@ -40,11 +40,23 @@
             android:layout_height="2dp"
             android:background="@android:color/darker_gray"/>
 
+        <TextView
+            android:id="@+id/tv_welcomeQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="@dimen/allQuestionWelcomeTextSize"
+            android:text="@string/allQuestions"/>
+
         <ListView
             android:id="@+id/lv_newQuestions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginM" />
+            android:layout_marginTop="@dimen/marginS" />
 
     </LinearLayout>
 

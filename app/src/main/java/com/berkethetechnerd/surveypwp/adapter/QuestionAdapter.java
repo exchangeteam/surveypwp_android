@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.berkethetechnerd.surveypwp.R;
@@ -25,6 +26,9 @@ public class QuestionAdapter extends ArrayAdapter<ModelQuestion> {
     // The context that the adapter will work on.
     private Context context;
 
+    // The listener
+    private OnAdapterInteractionListener mListener;
+
     /**
      * ViewHolder class is the part where a row view's components are initialized.
      * All components are constructed.
@@ -32,17 +36,19 @@ public class QuestionAdapter extends ArrayAdapter<ModelQuestion> {
     static class ViewHolder {
         @BindView(R.id.tv_questionTitle) TextView tvTitle;
         @BindView(R.id.tv_questionDescription) TextView tvDescription;
+        @BindView(R.id.row_question) LinearLayout layout;
 
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
 
-    public QuestionAdapter(ArrayList<ModelQuestion> dataSet, Context context) {
+    public QuestionAdapter(ArrayList<ModelQuestion> dataSet, Context context, OnAdapterInteractionListener listener) {
         super(context, R.layout.adapter_all_questions_row, dataSet);
 
         this.dataSet = dataSet;
         this.context = context;
+        this.mListener = listener;
     }
 
     /**
@@ -103,6 +109,17 @@ public class QuestionAdapter extends ArrayAdapter<ModelQuestion> {
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
+            viewHolder.layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mListener.editQuestion(question);
+                    return true;
+                }
+            });
         }
+    }
+
+    public interface OnAdapterInteractionListener {
+        void editQuestion(ModelQuestion question);
     }
 }

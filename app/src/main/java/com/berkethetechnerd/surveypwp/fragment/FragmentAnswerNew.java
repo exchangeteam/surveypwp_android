@@ -28,7 +28,7 @@ public class FragmentAnswerNew extends Fragment {
 
     @BindView(R.id.et_answerUsername) EditText etAnswerUsername;
     @BindView(R.id.et_answerQuestionnaireID) EditText etQuestionnaireID;
-    @BindView(R.id.tv_btnAnswerPlatform) TextView tvAnswerOfUser;
+    @BindView(R.id.tv_btnAnswerOfUser) TextView tvAnswerOfUser;
 
     private OnFragmentInteractionListener mListener;
 

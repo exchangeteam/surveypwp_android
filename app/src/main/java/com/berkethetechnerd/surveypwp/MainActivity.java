@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.berkethetechnerd.surveypwp.adapter.QuestionnaireAdapter;
+import com.berkethetechnerd.surveypwp.helper.SharedPrefHelper;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestionnaire;
 import com.berkethetechnerd.surveypwp.model.ModelQuestionnaire;
 import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
@@ -68,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
         public void onResponse(ApiResultAllQuestionnaire response) {
             questionnaires.clear();
             questionnaires.addAll(Arrays.asList(response.getItems()));
-
             adapter.notifyDataSetChanged();
+
+            SharedPrefHelper.setNumQuestionnaire(getApplicationContext(), questionnaires.size());
         }
     };
 

@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.lv_listQuestionnaire) ListView lvQuestionnaire;
 
-    ArrayList<ModelQuestionnaire> questionnaires;
-    QuestionnaireAdapter adapter;
+    private ArrayList<ModelQuestionnaire> questionnaires;
+    private QuestionnaireAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

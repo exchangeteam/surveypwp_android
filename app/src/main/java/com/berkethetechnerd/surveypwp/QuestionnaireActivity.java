@@ -67,6 +67,7 @@ public class QuestionnaireActivity extends AppCompatActivity
     @Override
     public void submitQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID) {
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private Response.Listener<JSONObject> addQuestionnaireSuccessListener = new Response.Listener<JSONObject>() {

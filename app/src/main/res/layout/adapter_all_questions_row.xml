@@ -23,7 +23,7 @@
         android:layout_marginStart="@dimen/marginS"
         android:layout_marginEnd="@dimen/marginS"
         android:layout_marginBottom="@dimen/marginS"
-        android:textStyle="normal"
+        android:textStyle="italic"
         android:textSize="@dimen/allQuestionnaireDescriptionTextSize"/>
 
 </LinearLayout>

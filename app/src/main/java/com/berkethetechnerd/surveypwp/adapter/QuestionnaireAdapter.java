@@ -97,7 +97,7 @@ public class QuestionnaireAdapter extends ArrayAdapter<ModelQuestionnaire> {
             String title = questionnaire.getTitle() + " (ID: " + String.valueOf(questionnaire.getId()) + ")";
             String description = questionnaire.getDescription();
 
-            if(description == null) {
+            if(description == null || description.isEmpty()) {
                 description = "No description provided.";
             }
 

@@ -31,7 +31,8 @@ import butterknife.OnClick;
  * Use the {@link FragmentCreateQuestionnaire#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentCreateQuestionnaire extends Fragment {
+public class FragmentCreateQuestionnaire extends Fragment
+    implements QuestionAdapter.OnAdapterInteractionListener {
 
     @BindView(R.id.tv_newQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_newQuestionnaireDescription) TextView tvDescription;
@@ -95,7 +96,7 @@ public class FragmentCreateQuestionnaire extends Fragment {
         }
 
         questions = new ArrayList<>();
-        adapter = new QuestionAdapter(questions, getContext());
+        adapter = new QuestionAdapter(questions, getContext(), this);
         lvQuestions.setAdapter(adapter);
 
         return rootView;
@@ -161,6 +162,60 @@ public class FragmentCreateQuestionnaire extends Fragment {
     @OnClick(R.id.btn_submitQuestionnaire)
     public void submitQuestionnaire(View v) {
         mListener.submitQuestionnaire(questions, Qid);
+    }
+
+    @Override
+    public void editQuestion(final ModelQuestion question) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+
+        final View view = layoutInflater.inflate(R.layout.dialog_add_question, null);
+        alertDialog.setView(view);
+        alertDialog.setTitle(getResources().getString(R.string.dialog_editQuestionTitle));
+
+        final EditText etTitle = view.findViewById(R.id.et_newQuestionTitle);
+        final EditText etDescription = view.findViewById(R.id.et_newQuestionDescription);
+
+        etTitle.setText(question.getTitle());
+        etDescription.setText(question.getDescription());
+
+        alertDialog.setPositiveButton(getResources().getString(R.string.btn_edit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String title = etTitle.getText().toString();
+                String description = etDescription.getText().toString();
+                String msg = "Title cannot be empty!";
+
+                if(title.isEmpty()) {
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                } else {
+                    ModelQuestion questionToChange = questions.get(questions.indexOf(question));
+                    questionToChange.setTitle(title);
+                    questionToChange.setDescription(description);
+
+                    adapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        alertDialog.setNeutralButton(getResources().getString(R.string.btn_delete), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                questions.remove(question);
+                adapter.notifyDataSetChanged();
+
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setNegativeButton(getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.show();
     }
 
     /**

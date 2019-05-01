@@ -56,7 +56,9 @@
         android:layout_marginTop="@dimen/marginXL"
         android:layout_marginStart="@dimen/marginM"
         android:layout_marginEnd="@dimen/marginM"
+        android:gravity="center_horizontal"
         android:text="@string/btn_editQuestionnaire"
+        android:textSize="@dimen/platformLoginTextSize"
         android:textColor="@color/textViewBtnColor" />
 
     <TextView
@@ -66,7 +68,9 @@
         android:layout_marginTop="@dimen/marginL"
         android:layout_marginStart="@dimen/marginM"
         android:layout_marginEnd="@dimen/marginM"
+        android:gravity="center_horizontal"
         android:text="@string/btn_answerPlatform"
+        android:textSize="@dimen/platformLoginTextSize"
         android:textColor="@color/textViewBtnColor" />
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.berkethetechnerd.surveypwp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.lv_listQuestionnaire) ListView lvQuestionnaire;
+    @BindView(R.id.refreshQuestionnaire) SwipeRefreshLayout swipeRefreshLayout;
 
     private ArrayList<ModelQuestionnaire> questionnaires;
     private QuestionnaireAdapter adapter;
@@ -41,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
         questionnaires = new ArrayList<>();
         adapter = new QuestionnaireAdapter(questionnaires, getApplicationContext());
         lvQuestionnaire.setAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getRecentQuestionnaire();
+            }
+        });
 
         getRecentQuestionnaire();
     }
@@ -71,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             questionnaires.addAll(Arrays.asList(response.getItems()));
             adapter.notifyDataSetChanged();
 
+            swipeRefreshLayout.setRefreshing(false);
             SharedPrefHelper.setNumQuestionnaire(getApplicationContext(), questionnaires.size());
         }
     };

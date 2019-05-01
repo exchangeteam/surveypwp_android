@@ -24,11 +24,18 @@
             android:textSize="@dimen/appNameTextSize"
             fontPath="fonts/IndieFlower.ttf" />
 
-        <ListView
-            android:id="@+id/lv_listQuestionnaire"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refreshQuestionnaire"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginM" />
+            android:layout_height="wrap_content">
+
+            <ListView
+                android:id="@+id/lv_listQuestionnaire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginM" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

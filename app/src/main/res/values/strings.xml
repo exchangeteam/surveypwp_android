@@ -8,6 +8,8 @@
     <string name="btn_editYourQuestionnaire">Edit questionnaire</string>
     <string name="btn_answerQuestionnaire">Answer questionnaire</string>
     <string name="btn_answerOfUser">See a user\'s answers</string>
+    <string name="btn_addNewQuestion">Add new question</string>
+    <string name="btn_submitQuestionnaire">Submit questionnaire</string>
 
     <string name="hint_questionnaire_title">Title</string>
     <string name="hint_question_title">Title</string>

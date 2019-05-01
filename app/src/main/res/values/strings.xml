@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">SurveyPWP</string>
     <string name="app_btnPlatform">Go to Questionnaire Platform</string>
+
+    <string name="btn_editQuestionnaire">Edit your questionnaire</string>
+    <string name="btn_answerPlatform">Go to answer platform</string>
+    <string name="btn_createQuestionnaire">Create questionnaire</string>
+    <string name="btn_editYourQuestionnaire">Edit questionnaire</string>
+    <string name="btn_answerQuestionnaire">Answer questionnaire</string>
+    <string name="btn_answerOfUser">See a user\'s answers</string>
+
+    <string name="hint_questionnaire_title">Title</string>
+    <string name="hint_question_title">Title</string>
+    <string name="hint_questionnaire_description">Description</string>
+    <string name="hint_question_description">Description</string>
+    <string name="hint_questionnaire_id">Questionnaire ID</string>
+    <string name="hint_answer_username">Username</string>
 </resources>

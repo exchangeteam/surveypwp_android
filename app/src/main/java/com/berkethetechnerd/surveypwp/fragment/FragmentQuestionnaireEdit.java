@@ -25,7 +25,7 @@ import butterknife.OnClick;
  */
 public class FragmentQuestionnaireEdit extends Fragment {
 
-    @BindView(R.id.btn_editQuestionnaire) EditText etQuestionnaireID;
+    @BindView(R.id.et_QuestionnaireID) EditText etQuestionnaireID;
 
     private OnFragmentInteractionListener mListener;
 

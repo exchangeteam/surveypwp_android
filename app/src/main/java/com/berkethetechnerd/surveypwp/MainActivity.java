@@ -54,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
         getRecentQuestionnaire();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getRecentQuestionnaire();
+    }
+
     /**
      * Font set up for the activity.
      * @param newBase: The context which the fonts will be set on.

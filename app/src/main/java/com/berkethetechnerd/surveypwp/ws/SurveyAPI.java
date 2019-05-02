@@ -7,6 +7,7 @@ import com.android.volley.request.StringRequest;
 import com.berkethetechnerd.surveypwp.ApplicationClass;
 import com.berkethetechnerd.surveypwp.helper.ApiURL;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestionnaire;
+import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestions;
 import com.berkethetechnerd.surveypwp.model.ApiResultNoData;
 
 import org.json.JSONException;
@@ -47,7 +48,22 @@ public class SurveyAPI {
             e.printStackTrace();
         }
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, JRequestObject, successListener, errorListener);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                JRequestObject, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
+    public static void getQuestions(final int id, Response.Listener<ApiResultAllQuestions> successListener,
+                                    Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_GET_QUESTIONS(id);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultAllQuestions> request = new GsonRequest<>(Request.Method.GET, URL,
+                ApiResultAllQuestions.class, headers, params, successListener, errorListener);
 
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);

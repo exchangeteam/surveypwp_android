@@ -142,7 +142,7 @@ public class FragmentCreateQuestionnaire extends Fragment
                 if(title.isEmpty()) {
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                 } else {
-                    questions.add(new ModelQuestion(0, title, description, null));
+                    questions.add(new ModelQuestion(0, 0, title, description, null));
                     adapter.notifyDataSetChanged();
 
                     dialog.dismiss();

@@ -9,6 +9,9 @@ public class ModelQuestion {
     private int id;
 
     @Expose
+    private int questionnaire_id;
+
+    @Expose
     private String title;
 
     @Expose
@@ -17,8 +20,9 @@ public class ModelQuestion {
     @SerializedName("@controls")
     private HyperControls controls;
 
-    public ModelQuestion(int id, String title, String description, HyperControls controls) {
+    public ModelQuestion(int id, int questionnaire_id, String title, String description, HyperControls controls) {
         this.id = id;
+        this.questionnaire_id = questionnaire_id;
         this.title = title;
         this.description = description;
         this.controls = controls;
@@ -26,6 +30,10 @@ public class ModelQuestion {
 
     public int getId() {
         return id;
+    }
+
+    public int getQuestionnaire_id() {
+        return questionnaire_id;
     }
 
     public String getTitle() {
@@ -42,6 +50,10 @@ public class ModelQuestion {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setQuestionnaire_id(int questionnaire_id) {
+        this.questionnaire_id = questionnaire_id;
     }
 
     public void setTitle(String title) {

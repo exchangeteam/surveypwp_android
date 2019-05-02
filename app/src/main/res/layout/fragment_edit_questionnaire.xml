@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.FragmentEditQuestionnaire" >
+
+    <LinearLayout
+        android:id="@+id/layout_editQuestionnaire"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/marginXXL"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tv_editQuestionnaireTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:layout_marginBottom="@dimen/marginS"
+            android:textStyle="bold"
+            android:textSize="@dimen/allQuestionnaireTitleTextSize" />
+
+        <TextView
+            android:id="@+id/tv_editQuestionnaireDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:layout_marginBottom="@dimen/marginM"
+            android:textStyle="italic"
+            android:textSize="@dimen/allQuestionnaireDescriptionTextSize" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/tv_editWelcomeQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="@dimen/allQuestionWelcomeTextSize"
+            android:text="@string/allQuestions"/>
+
+        <ListView
+            android:id="@+id/lv_editQuestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/layout_editQuestionnaire"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/btn_editAddQuestion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginL"
+                android:layout_marginBottom="@dimen/marginM"
+                android:layout_marginStart="@dimen/marginS"
+                android:layout_marginEnd="@dimen/marginS"
+                android:text="@string/btn_addNewQuestion" />
+
+            <Button
+                android:id="@+id/btn_editSubmitQuestionnaire"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginL"
+                android:layout_marginBottom="@dimen/marginM"
+                android:layout_marginStart="@dimen/marginS"
+                android:layout_marginEnd="@dimen/marginS"
+                android:text="@string/btn_submitQuestionnaire" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

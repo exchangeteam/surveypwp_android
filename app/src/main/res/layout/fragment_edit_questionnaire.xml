@@ -15,6 +15,18 @@
         android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/tv_editWelcomeQuestionnaire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="@dimen/allQuestionWelcomeTextSize"
+            android:text="@string/allQuestionnaire"/>
+
+        <TextView
             android:id="@+id/tv_editQuestionnaireTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,6 +46,19 @@
             android:layout_marginBottom="@dimen/marginM"
             android:textStyle="italic"
             android:textSize="@dimen/allQuestionnaireDescriptionTextSize" />
+
+        <TextView
+            android:id="@+id/tv_editQuestionnaireDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:layout_marginBottom="@dimen/marginM"
+            android:gravity="end"
+            android:textSize="@dimen/allQuestionnaireDescriptionTextSize"
+            android:textColor="@color/deleteColor"
+            android:text="@string/deleteQuestionnaire" />
 
         <View
             android:layout_width="match_parent"

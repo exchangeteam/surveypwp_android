@@ -37,6 +37,7 @@ public class FragmentEditQuestionnaire extends Fragment
 
     @BindView(R.id.tv_editQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_editQuestionnaireDescription) TextView tvDescription;
+    @BindView(R.id.tv_editQuestionnaireDelete) TextView tvDelete;
     @BindView(R.id.lv_editQuestions) ListView lvQuestions;
 
     private static final String ARG_TITLE = "questionnaire_title";
@@ -91,6 +92,8 @@ public class FragmentEditQuestionnaire extends Fragment
 
             if(description == null || description.isEmpty()) {
                 description = "No description provided.";
+            } else {
+                description = "Description: " + description;
             }
 
             tvTitle.setText(title);
@@ -100,6 +103,32 @@ public class FragmentEditQuestionnaire extends Fragment
         adapter = new QuestionAdapter(questions, getContext(), this);
         lvQuestions.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle(getResources().getString(R.string.dialog_deleteQuestionnaireConfirmationTitle));
+                alertDialog.setMessage(getResources().getString(R.string.dialog_deleteQıestionnaireConfirmationMessage));
+
+                alertDialog.setPositiveButton(getResources().getString(R.string.btn_delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mListener.deleteQuestionnaire(Qid);
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog.setNegativeButton(getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
 
         return rootView;
     }
@@ -238,5 +267,6 @@ public class FragmentEditQuestionnaire extends Fragment
      */
     public interface OnFragmentInteractionListener {
         void submitEditQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID);
+        void deleteQuestionnaire(int id);
     }
 }

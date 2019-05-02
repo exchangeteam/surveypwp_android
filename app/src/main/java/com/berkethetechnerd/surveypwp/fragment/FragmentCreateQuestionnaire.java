@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.berkethetechnerd.surveypwp.R;
 import com.berkethetechnerd.surveypwp.adapter.QuestionAdapter;
 import com.berkethetechnerd.surveypwp.model.ModelQuestion;
-import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
 
 import java.util.ArrayList;
 

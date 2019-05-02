@@ -3,6 +3,7 @@ package com.berkethetechnerd.surveypwp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -111,6 +112,18 @@ public class QuestionnaireActivity extends AppCompatActivity
 
     @Override
     public void submitEditQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID) {
+        for(ModelQuestion question: listOfQuestions) {
+            String title = question.getTitle();
+            String description = question.getDescription();
+            int question_id = question.getId();
+
+            if(question_id == 0) {
+                SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+            } else {
+                SurveyAPI.editQuestion(questionnaireID, question_id, title, description, editQuestionnaireSuccessListener, editQuestionnaireErrorListener);
+            }
+        }
+
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -256,6 +269,20 @@ public class QuestionnaireActivity extends AppCompatActivity
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
+        }
+    };
+
+    private Response.Listener<JSONObject> editQuestionnaireSuccessListener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            // The server does not return JSONObject as response...
+        }
+    };
+
+    private Response.ErrorListener editQuestionnaireErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.v("ERROR", error.toString());
         }
     };
 }

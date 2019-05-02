@@ -26,4 +26,8 @@ public class ApiURL {
     public static String API_DELETE_QUESTIONNAIRE(int questionnaire_id) {
         return API_ALL_QUESTIONNAIRE() + questionnaire_id + "/";
     }
+
+    public static String API_EDIT_QUESTION(int questionnaire_id, int question_id) {
+        return API_POST_QUESTION(questionnaire_id) + question_id + "/";
+    }
 }

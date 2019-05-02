@@ -85,6 +85,26 @@ public class SurveyAPI {
         coreApi.addToRequestQueue(request);
     }
 
+    public static void addQuestion(final int id, final String title, final String description,
+                                   Response.Listener<JSONObject> successListener,
+                                   Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_POST_QUESTION(id);
+
+        JSONObject JRequestObject = new JSONObject();
+        try {
+            JRequestObject.put("title", title);
+            JRequestObject.put("description", description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                JRequestObject, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
     public static void getAnswers(final int id, Response.Listener<ApiResultAllAnswers> successListener,
                                   Response.ErrorListener errorListener) {
         String URL = ApiURL.API_GET_QUESTIONS(id);
@@ -94,6 +114,20 @@ public class SurveyAPI {
 
         GsonRequest<ApiResultAllAnswers> request = new GsonRequest<>(Request.Method.GET, URL,
                 ApiResultAllAnswers.class, headers, params, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
+    public static void deleteQuestionnaire(final int id, Response.Listener<ApiResultNoData> successListener,
+                                           Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_DELETE_QUESTIONNAIRE(id);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultNoData> request = new GsonRequest<>(Request.Method.DELETE, URL,
+                ApiResultNoData.class, headers, params, successListener, errorListener);
 
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);

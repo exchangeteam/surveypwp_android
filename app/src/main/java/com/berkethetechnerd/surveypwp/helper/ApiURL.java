@@ -18,4 +18,12 @@ public class ApiURL {
     public static String API_GET_QUESTIONS(int questionnaire_id) {
         return API_ONE_QUESTIONNAIRE(questionnaire_id) + "/questions/";
     }
+
+    public static String API_POST_QUESTION(int questionnaire_id) {
+        return API_ONE_QUESTIONNAIRE(questionnaire_id) + "/questions/";
+    }
+
+    public static String API_DELETE_QUESTIONNAIRE(int questionnaire_id) {
+        return API_ALL_QUESTIONNAIRE() + questionnaire_id + "/";
+    }
 }

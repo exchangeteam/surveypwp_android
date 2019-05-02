@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.berkethetechnerd.surveypwp.R;
 import com.berkethetechnerd.surveypwp.adapter.QuestionAdapter;
 import com.berkethetechnerd.surveypwp.model.ModelQuestion;
+import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
 
 import java.util.ArrayList;
 
@@ -84,12 +85,14 @@ public class FragmentCreateQuestionnaire extends Fragment
         Bundle args = getArguments();
 
         if(args != null) {
-            String title = getArguments().getString(ARG_TITLE) + " (ID: " + String.valueOf(getArguments().getInt(ARG_ID)) + ")";
+            String title = "Title: " + getArguments().getString(ARG_TITLE) + " (ID: " + String.valueOf(getArguments().getInt(ARG_ID)) + ")";
             String description = getArguments().getString(ARG_DESC);
             Qid = getArguments().getInt(ARG_ID);
 
             if(description == null || description.isEmpty()) {
                 description = "No description provided.";
+            } else {
+                description = "Description: " + description;
             }
 
             tvTitle.setText(title);
@@ -103,7 +106,26 @@ public class FragmentCreateQuestionnaire extends Fragment
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.deleteQuestionnaire(Qid);
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                alertDialog.setTitle(getResources().getString(R.string.dialog_deleteQuestionnaireConfirmationTitle));
+                alertDialog.setMessage(getResources().getString(R.string.dialog_deleteQıestionnaireConfirmationMessage));
+
+                alertDialog.setPositiveButton(getResources().getString(R.string.btn_delete), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mListener.deleteQuestionnaire(Qid);
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog.setNegativeButton(getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
             }
         });
 

@@ -36,6 +36,7 @@ public class FragmentCreateQuestionnaire extends Fragment
 
     @BindView(R.id.tv_newQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_newQuestionnaireDescription) TextView tvDescription;
+    @BindView(R.id.tv_questionnaireDelete) TextView tvDelete;
     @BindView(R.id.lv_newQuestions) ListView lvQuestions;
 
     private static final String ARG_TITLE = "questionnaire_title";
@@ -98,6 +99,13 @@ public class FragmentCreateQuestionnaire extends Fragment
         questions = new ArrayList<>();
         adapter = new QuestionAdapter(questions, getContext(), this);
         lvQuestions.setAdapter(adapter);
+
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.deleteQuestionnaire(Qid);
+            }
+        });
 
         return rootView;
     }
@@ -230,5 +238,6 @@ public class FragmentCreateQuestionnaire extends Fragment
      */
     public interface OnFragmentInteractionListener {
         void submitQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID);
+        void deleteQuestionnaire(int id);
     }
 }

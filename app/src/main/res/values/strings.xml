@@ -2,7 +2,10 @@
     <string name="app_name">SurveyPWP</string>
     <string name="app_btnPlatform">Go to Questionnaire Platform</string>
 
+    <string name="allQuestionnaire">Questionnaire</string>
     <string name="allQuestions">Questions</string>
+
+    <string name="deleteQuestionnaire">Delete this questionnaire</string>
 
     <string name="btn_editQuestionnaire">Edit your questionnaire</string>
     <string name="btn_answerPlatform">Go to answer platform</string>

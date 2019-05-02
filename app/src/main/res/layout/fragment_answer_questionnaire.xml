@@ -94,6 +94,17 @@
                 android:layout_marginEnd="@dimen/marginS"
                 android:text="@string/btn_submitAnswers" />
 
+            <Button
+                android:id="@+id/btn_goBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginL"
+                android:layout_marginBottom="@dimen/marginM"
+                android:layout_marginStart="@dimen/marginS"
+                android:layout_marginEnd="@dimen/marginS"
+                android:visibility="gone"
+                android:text="@string/btn_goBack" />
+
         </LinearLayout>
 
     </RelativeLayout>

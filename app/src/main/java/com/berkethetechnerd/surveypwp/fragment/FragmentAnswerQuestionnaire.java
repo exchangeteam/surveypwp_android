@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +34,8 @@ public class FragmentAnswerQuestionnaire extends Fragment {
     @BindView(R.id.tv_answerQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_answerQuestionnaireDescription) TextView tvDescription;
     @BindView(R.id.tv_answerWelcomeQuestions) TextView tvWelcome;
+    @BindView(R.id.btn_goBack) Button btnGoBack;
+    @BindView(R.id.btn_answerSubmitQuestionnaire) Button btnSubmit;
     @BindView(R.id.lv_answerQuestions) ListView lvAnswers;
 
     private static final String ARG_TITLE = "questionnaire_title";
@@ -131,9 +134,25 @@ public class FragmentAnswerQuestionnaire extends Fragment {
         mListener.submitAnswerQuestionnaire(answers, Qusername, Qid);
     }
 
+    @OnClick(R.id.btn_goBack)
+    public void returnHomePage(View view) {
+        mListener.returnHomePage();
+    }
+
     public void setAnswerData(ModelAnswer[] data) {
         answers.clear();
         answers.addAll(Arrays.asList(data));
+        adapter.notifyDataSetChanged();
+    }
+
+    public void setAnswerContent(ModelAnswer[] items) {
+        for(int i = 0; i < items.length; i++) {
+            answers.get(i).setAnswer(items[i].getAnswer());
+        }
+
+        btnGoBack.setVisibility(View.VISIBLE);
+        btnSubmit.setVisibility(View.GONE);
+
         adapter.notifyDataSetChanged();
     }
 
@@ -149,5 +168,6 @@ public class FragmentAnswerQuestionnaire extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID);
+        void returnHomePage();
     }
 }

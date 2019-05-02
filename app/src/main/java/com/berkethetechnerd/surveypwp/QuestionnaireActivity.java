@@ -88,6 +88,10 @@ public class QuestionnaireActivity extends AppCompatActivity
                 break;
 
             case INTENT_SEE_ANSWER_OF_USER:
+                Qusername = callerIntent.getStringExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME);
+                Qid = callerIntent.getIntExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, 0);
+                SurveyAPI.getOneQuestionnaire(Qid, getOneQuestionnaireForUserSuccessListener, getOneQuestionnaireForUserErrorListener);
+
                 break;
         }
     }
@@ -135,6 +139,11 @@ public class QuestionnaireActivity extends AppCompatActivity
     @Override
     public void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID) {
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    @Override
+    public void returnHomePage() {
         finish();
     }
 
@@ -301,6 +310,85 @@ public class QuestionnaireActivity extends AppCompatActivity
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
+        }
+    };
+
+    private Response.Listener<ApiResultOneQuestionnaire> getOneQuestionnaireForUserSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+        @Override
+        public void onResponse(ApiResultOneQuestionnaire response) {
+            Qtitle = response.getTitle();
+            Qdescription = response.getDescription();
+
+            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
+                    Qtitle, Qdescription, Qusername, Qid
+            );
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
+                    .commit();
+
+            SurveyAPI.getAnswers(Qid, getQuestionsForUserSuccessListener, getQuestionsForUserErrorListener);
+        }
+    };
+
+    private Response.ErrorListener getOneQuestionnaireForUserErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            int errorCode = error.networkResponse.statusCode;
+
+            if(errorCode == 404) {
+                String msg = "The questionnaire does not exist!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+
+            finish();
+        }
+    };
+
+    private Response.Listener<ApiResultAllAnswers> getQuestionsForUserSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
+        @Override
+        public void onResponse(ApiResultAllAnswers response) {
+            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
+
+            if(fragment != null) {
+                fragment.setAnswerData(response.getItems());
+                SurveyAPI.getUserAnswers(Qid, Qusername, userAnswersSuccessListener, userAnswersErrorListener);
+            }
+        }
+    };
+
+    private Response.ErrorListener getQuestionsForUserErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No error handling...
+        }
+    };
+
+    private Response.Listener<ApiResultAllAnswers> userAnswersSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
+        @Override
+        public void onResponse(ApiResultAllAnswers response) {
+            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
+
+            if(fragment != null) {
+                fragment.setAnswerContent(response.getItems());
+            }
+        }
+    };
+
+    private Response.ErrorListener userAnswersErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            int errorCode = error.networkResponse.statusCode;
+
+            if(errorCode == 405) {
+                String msg = "The user does not exist for this questionnaire!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            } else if(errorCode == 404) {
+                String msg = "The questionnaire does not exist!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+
+            finish();
         }
     };
 }

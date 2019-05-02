@@ -3,7 +3,6 @@ package com.berkethetechnerd.surveypwp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -14,6 +13,7 @@ import com.berkethetechnerd.surveypwp.fragment.FragmentEditQuestionnaire;
 import com.berkethetechnerd.surveypwp.helper.SharedPrefHelper;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllAnswers;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestions;
+import com.berkethetechnerd.surveypwp.model.ApiResultNoData;
 import com.berkethetechnerd.surveypwp.model.ApiResultOneQuestionnaire;
 import com.berkethetechnerd.surveypwp.model.ModelAnswer;
 import com.berkethetechnerd.surveypwp.model.ModelQuestion;
@@ -93,8 +93,21 @@ public class QuestionnaireActivity extends AppCompatActivity
 
     @Override
     public void submitQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID) {
+        for(ModelQuestion question: listOfQuestions) {
+            String title = question.getTitle();
+            String description = question.getDescription();
+
+            SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+        }
+
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
         finish();
+    }
+
+    @Override
+    public void deleteQuestionnaire(int id) {
+        SurveyAPI.deleteQuestionnaire(id, questionnaireDeleteSuccessListener, questionnaireDeleteErrorListener);
+
     }
 
     @Override
@@ -196,7 +209,7 @@ public class QuestionnaireActivity extends AppCompatActivity
     private Response.ErrorListener getOneQuestionnaireForAnswerErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.v("ERROR: ", error.toString());
+            // No error handling...
         }
     };
 
@@ -214,7 +227,36 @@ public class QuestionnaireActivity extends AppCompatActivity
     private Response.ErrorListener getQuestionsForAnswerErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.v("ERROR: ", error.toString());
+            // No error handling...
+        }
+    };
+
+    private Response.Listener<JSONObject> addQuestionSuccessListener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            // The server does not return JSONObject as response...
+        }
+    };
+
+    private Response.ErrorListener addQuestionErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No need of action...
+        }
+    };
+
+    private Response.Listener<ApiResultNoData> questionnaireDeleteSuccessListener = new Response.Listener<ApiResultNoData>() {
+        @Override
+        public void onResponse(ApiResultNoData response) {
+            Toast.makeText(getApplicationContext(), "Questionnaire deleted", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    };
+
+    private Response.ErrorListener questionnaireDeleteErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No error handling...
         }
     };
 }

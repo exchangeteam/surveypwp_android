@@ -117,10 +117,14 @@ public class QuestionnaireActivity extends AppCompatActivity
             String description = question.getDescription();
             int question_id = question.getId();
 
-            if(question_id == 0) {
-                SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+            if(question.isDeleted()) {
+                SurveyAPI.deleteQuestion(questionnaireID, question_id, questionDeleteSuccessListener, questionDeleteErrorListener);
             } else {
-                SurveyAPI.editQuestion(questionnaireID, question_id, title, description, editQuestionnaireSuccessListener, editQuestionnaireErrorListener);
+                if(question_id == 0) {
+                    SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+                } else {
+                    SurveyAPI.editQuestion(questionnaireID, question_id, title, description, editQuestionnaireSuccessListener, editQuestionnaireErrorListener);
+                }
             }
         }
 
@@ -283,6 +287,20 @@ public class QuestionnaireActivity extends AppCompatActivity
         @Override
         public void onErrorResponse(VolleyError error) {
             Log.v("ERROR", error.toString());
+        }
+    };
+
+    private Response.Listener<ApiResultNoData> questionDeleteSuccessListener = new Response.Listener<ApiResultNoData>() {
+        @Override
+        public void onResponse(ApiResultNoData response) {
+            // No need of action...
+        }
+    };
+
+    private Response.ErrorListener questionDeleteErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No error handling...
         }
     };
 }

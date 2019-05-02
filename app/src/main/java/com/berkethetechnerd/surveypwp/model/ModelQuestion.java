@@ -20,6 +20,8 @@ public class ModelQuestion {
     @SerializedName("@controls")
     private HyperControls controls;
 
+    private boolean isDeleted = false;
+
     public ModelQuestion(int id, int questionnaire_id, String title, String description, HyperControls controls) {
         this.id = id;
         this.questionnaire_id = questionnaire_id;
@@ -48,6 +50,10 @@ public class ModelQuestion {
         return controls;
     }
 
+    public boolean isDeleted() {
+        return this.isDeleted;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -66,5 +72,9 @@ public class ModelQuestion {
 
     public void setControls(HyperControls controls) {
         this.controls = controls;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.isDeleted = deleted;
     }
 }

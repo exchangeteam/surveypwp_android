@@ -153,4 +153,19 @@ public class SurveyAPI {
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);
     }
+
+    public static void deleteQuestion(final int questionnaire_id, final int question_id,
+                                      Response.Listener<ApiResultNoData> successListener,
+                                      Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_DELETE_QUESTION(questionnaire_id, question_id);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultNoData> request = new GsonRequest<>(Request.Method.DELETE, URL,
+                ApiResultNoData.class, headers, params, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
 }

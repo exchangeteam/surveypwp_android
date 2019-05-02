@@ -45,6 +45,7 @@ public class FragmentEditQuestionnaire extends Fragment
     private static final String ARG_ID = "questionnaire_id";
 
     private ArrayList<ModelQuestion> questions;
+    private ArrayList<ModelQuestion> dataToSubmit;
     private QuestionAdapter adapter;
     private int Qid;
 
@@ -76,6 +77,7 @@ public class FragmentEditQuestionnaire extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         questions = new ArrayList<>();
+        dataToSubmit = new ArrayList<>();
     }
 
     @Override
@@ -173,7 +175,9 @@ public class FragmentEditQuestionnaire extends Fragment
                 if(title.isEmpty()) {
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                 } else {
-                    questions.add(new ModelQuestion(0, 0, title, description, null));
+                    ModelQuestion newQ = new ModelQuestion(0, 0, title, description, null);
+                    questions.add(newQ);
+                    dataToSubmit.add(newQ);
                     adapter.notifyDataSetChanged();
 
                     dialog.dismiss();
@@ -192,7 +196,7 @@ public class FragmentEditQuestionnaire extends Fragment
 
     @OnClick(R.id.btn_editSubmitQuestionnaire)
     public void submitQuestionnaire(View v) {
-        mListener.submitEditQuestionnaire(questions, Qid);
+        mListener.submitEditQuestionnaire(dataToSubmit, Qid);
     }
 
     @Override
@@ -224,6 +228,10 @@ public class FragmentEditQuestionnaire extends Fragment
                     questionToChange.setTitle(title);
                     questionToChange.setDescription(description);
 
+                    ModelQuestion questionToChange2 = dataToSubmit.get(dataToSubmit.indexOf(question));
+                    questionToChange2.setTitle(title);
+                    questionToChange2.setDescription(description);
+
                     adapter.notifyDataSetChanged();
                     dialog.dismiss();
                 }
@@ -233,9 +241,17 @@ public class FragmentEditQuestionnaire extends Fragment
         alertDialog.setNeutralButton(getResources().getString(R.string.btn_delete), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                questions.remove(question);
-                adapter.notifyDataSetChanged();
+                ModelQuestion questionToChange = questions.get(questions.indexOf(question));
+                questions.remove(questionToChange);
 
+                ModelQuestion questionToChange2 = dataToSubmit.get(dataToSubmit.indexOf(question));
+                if(questionToChange2.getId() == 0) {
+                    dataToSubmit.remove(questionToChange2);
+                } else {
+                    questionToChange2.setDeleted(true);
+                }
+
+                adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }
         });
@@ -251,7 +267,11 @@ public class FragmentEditQuestionnaire extends Fragment
 
     public void setQuestionData(ModelQuestion[] data) {
         questions.clear();
+        dataToSubmit.clear();
+
         questions.addAll(Arrays.asList(data));
+        dataToSubmit.addAll(Arrays.asList(data));
+
         adapter.notifyDataSetChanged();
     }
 

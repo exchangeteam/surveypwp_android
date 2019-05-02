@@ -3,7 +3,8 @@ package com.berkethetechnerd.surveypwp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // The comment in the placement of the specific row.
-        final ModelAnswer answer = getItem(position);
+        ModelAnswer answer = getItem(position);
 
         /*
          * ViewHolder is used to avoid instantiating a view for every item in your adapter,
@@ -107,6 +108,22 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
+            viewHolder.etAnswer.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    answer.setAnswer(s.toString());
+                }
+            });
 
             if(content != null && !content.isEmpty()) {
                 viewHolder.etAnswer.setText(content);

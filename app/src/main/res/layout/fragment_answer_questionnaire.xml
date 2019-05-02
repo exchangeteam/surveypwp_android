@@ -15,6 +15,18 @@
         android:orientation="vertical" >
 
         <TextView
+            android:id="@+id/tv_answerWelcomeQuestionnaire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:gravity="center_horizontal"
+            android:textStyle="bold"
+            android:textSize="@dimen/allQuestionWelcomeTextSize"
+            android:text="@string/allQuestionnaire"/>
+
+        <TextView
             android:id="@+id/tv_answerQuestionnaireTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

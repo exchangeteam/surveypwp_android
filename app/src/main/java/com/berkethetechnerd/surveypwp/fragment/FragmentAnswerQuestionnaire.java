@@ -84,7 +84,7 @@ public class FragmentAnswerQuestionnaire extends Fragment {
         Bundle args = getArguments();
 
         if(args != null) {
-            String title = getArguments().getString(ARG_TITLE) + " (ID: " + String.valueOf(getArguments().getInt(ARG_ID)) + ")";
+            String title = "Title: " + getArguments().getString(ARG_TITLE) + " (ID: " + String.valueOf(getArguments().getInt(ARG_ID)) + ")";
             String description = getArguments().getString(ARG_DESC);
             String welcomeText = "Questions (User: " + getArguments().getString(ARG_USER) + ")";
 
@@ -93,6 +93,8 @@ public class FragmentAnswerQuestionnaire extends Fragment {
 
             if(description == null || description.isEmpty()) {
                 description = "No description provided.";
+            } else {
+                description = "Description: " + description;
             }
 
             tvTitle.setText(title);

@@ -1,0 +1,45 @@
+package com.berkethetechnerd.surveypwp.model;
+
+import com.google.gson.annotations.Expose;
+
+public class ApiResultOneQuestionnaire {
+
+    @Expose
+    private int id;
+
+    @Expose
+    private String title;
+
+    @Expose
+    private String description;
+
+    public ApiResultOneQuestionnaire(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+}

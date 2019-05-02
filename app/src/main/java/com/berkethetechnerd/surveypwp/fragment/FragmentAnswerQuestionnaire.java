@@ -10,8 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.berkethetechnerd.surveypwp.R;
-import com.berkethetechnerd.surveypwp.adapter.QuestionAdapter;
-import com.berkethetechnerd.surveypwp.model.ModelQuestion;
+import com.berkethetechnerd.surveypwp.adapter.AnswerAdapter;
+import com.berkethetechnerd.surveypwp.model.ModelAnswer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,21 +28,20 @@ import butterknife.OnClick;
  * Use the {@link FragmentAnswerQuestionnaire#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentAnswerQuestionnaire extends Fragment
-        implements QuestionAdapter.OnAdapterInteractionListener {
+public class FragmentAnswerQuestionnaire extends Fragment {
 
     @BindView(R.id.tv_answerQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_answerQuestionnaireDescription) TextView tvDescription;
     @BindView(R.id.tv_answerWelcomeQuestions) TextView tvWelcome;
-    @BindView(R.id.lv_answerQuestions) ListView lvQuestions;
+    @BindView(R.id.lv_answerQuestions) ListView lvAnswers;
 
     private static final String ARG_TITLE = "questionnaire_title";
     private static final String ARG_DESC = "questionnaire_description";
     private static final String ARG_ID = "questionnaire_id";
     private static final String ARG_USER = "questionnaire_user";
 
-    private ArrayList<ModelQuestion> questions;
-    private QuestionAdapter adapter;
+    private ArrayList<ModelAnswer> answers;
+    private AnswerAdapter adapter;
     private String Qusername;
     private int Qid;
 
@@ -74,7 +73,7 @@ public class FragmentAnswerQuestionnaire extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questions = new ArrayList<>();
+        answers = new ArrayList<>();
     }
 
     @Override
@@ -101,8 +100,8 @@ public class FragmentAnswerQuestionnaire extends Fragment
             tvWelcome.setText(welcomeText);
         }
 
-        adapter = new QuestionAdapter(questions, getContext(), this);
-        lvQuestions.setAdapter(adapter);
+        adapter = new AnswerAdapter(answers, getContext());
+        lvAnswers.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         return rootView;
@@ -127,18 +126,13 @@ public class FragmentAnswerQuestionnaire extends Fragment
 
     @OnClick(R.id.btn_answerSubmitQuestionnaire)
     public void submitQuestionnaire(View v) {
-        mListener.submitAnswerQuestionnaire(questions, Qusername, Qid);
+        mListener.submitAnswerQuestionnaire(answers, Qusername, Qid);
     }
 
-    public void setQuestionData(ModelQuestion[] data) {
-        questions.clear();
-        questions.addAll(Arrays.asList(data));
+    public void setAnswerData(ModelAnswer[] data) {
+        answers.clear();
+        answers.addAll(Arrays.asList(data));
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void editQuestion(ModelQuestion question) {
-        // Won't be implemented.
     }
 
     /**
@@ -152,6 +146,6 @@ public class FragmentAnswerQuestionnaire extends Fragment
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void submitAnswerQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, String username, int questionnaireID);
+        void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID);
     }
 }

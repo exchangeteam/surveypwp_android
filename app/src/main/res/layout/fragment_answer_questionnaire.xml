@@ -80,7 +80,7 @@
                 android:layout_marginBottom="@dimen/marginM"
                 android:layout_marginStart="@dimen/marginS"
                 android:layout_marginEnd="@dimen/marginS"
-                android:text="@string/btn_submitQuestionnaire" />
+                android:text="@string/btn_submitAnswers" />
 
         </LinearLayout>
 

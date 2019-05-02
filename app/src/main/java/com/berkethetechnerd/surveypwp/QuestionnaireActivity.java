@@ -12,8 +12,10 @@ import com.berkethetechnerd.surveypwp.fragment.FragmentAnswerQuestionnaire;
 import com.berkethetechnerd.surveypwp.fragment.FragmentCreateQuestionnaire;
 import com.berkethetechnerd.surveypwp.fragment.FragmentEditQuestionnaire;
 import com.berkethetechnerd.surveypwp.helper.SharedPrefHelper;
+import com.berkethetechnerd.surveypwp.model.ApiResultAllAnswers;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestions;
 import com.berkethetechnerd.surveypwp.model.ApiResultOneQuestionnaire;
+import com.berkethetechnerd.surveypwp.model.ModelAnswer;
 import com.berkethetechnerd.surveypwp.model.ModelQuestion;
 import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
 
@@ -102,7 +104,7 @@ public class QuestionnaireActivity extends AppCompatActivity
     }
 
     @Override
-    public void submitAnswerQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, String username, int questionnaireID) {
+    public void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID) {
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -187,7 +189,7 @@ public class QuestionnaireActivity extends AppCompatActivity
                     .add(R.id.questionnaire_content, fragmentEditQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
                     .commit();
 
-            SurveyAPI.getQuestions(Qid, getQuestionsForAnswerSuccessListener, getQuestionsForAnswerErrorListener);
+            SurveyAPI.getAnswers(Qid, getQuestionsForAnswerSuccessListener, getQuestionsForAnswerErrorListener);
         }
     };
 
@@ -198,13 +200,13 @@ public class QuestionnaireActivity extends AppCompatActivity
         }
     };
 
-    private Response.Listener<ApiResultAllQuestions> getQuestionsForAnswerSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
+    private Response.Listener<ApiResultAllAnswers> getQuestionsForAnswerSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
         @Override
-        public void onResponse(ApiResultAllQuestions response) {
+        public void onResponse(ApiResultAllAnswers response) {
             FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
 
             if(fragment != null) {
-                fragment.setQuestionData(response.getItems());
+                fragment.setAnswerData(response.getItems());
             }
         }
     };

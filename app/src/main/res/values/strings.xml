@@ -33,4 +33,8 @@
     <string name="dialog_newQuestionMessage">Enter a title for the question. Description is not mandatory.</string>
     <string name="dialog_editQuestionTitle">Edit question</string>
     <string name="dialog_editQuestionMessage">Edit your question\'s title and description.</string>
+    <string name="dialog_deleteQuestionnaireConfirmationTitle">Deleting the questionnaire</string>
+    <string name="dialog_deleteQıestionnaireConfirmationMessage">Are you sure to delete this questionnaire? It will
+        be removed our system entirely. If there is related questions and answers, they will also be deleted in a way
+        unrecoverable!</string>
 </resources>

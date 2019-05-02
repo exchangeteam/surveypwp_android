@@ -1,8 +1,13 @@
 package com.berkethetechnerd.surveypwp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -105,9 +110,25 @@ public class QuestionnaireActivity extends AppCompatActivity
     }
 
     @Override
-    public void deleteQuestionnaire(int id) {
-        SurveyAPI.deleteQuestionnaire(id, questionnaireDeleteSuccessListener, questionnaireDeleteErrorListener);
+    public void deleteQuestionnaire(final int id) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getApplicationContext());
+        alertDialog.setTitle(getResources().getString(R.string.dialog_deleteQuestionnaireConfirmationTitle));
+        alertDialog.setMessage(getResources().getString(R.string.dialog_deleteQıestionnaireConfirmationMessage));
 
+        alertDialog.setPositiveButton(getResources().getString(R.string.btn_delete), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SurveyAPI.deleteQuestionnaire(id, questionnaireDeleteSuccessListener, questionnaireDeleteErrorListener);
+                dialog.dismiss();
+            }
+        });
+
+        alertDialog.setNegativeButton(getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override

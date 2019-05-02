@@ -9,6 +9,7 @@ import com.berkethetechnerd.surveypwp.helper.ApiURL;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestionnaire;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllQuestions;
 import com.berkethetechnerd.surveypwp.model.ApiResultNoData;
+import com.berkethetechnerd.surveypwp.model.ApiResultOneQuestionnaire;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +51,20 @@ public class SurveyAPI {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
                 JRequestObject, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
+    public static void getOneQuestionnaire(final int id, Response.Listener<ApiResultOneQuestionnaire>
+                                           successListener, Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_ONE_QUESTIONNAIRE(id);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultOneQuestionnaire> request = new GsonRequest<>(Request.Method.GET, URL,
+                ApiResultOneQuestionnaire.class, headers, params, successListener, errorListener);
 
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);

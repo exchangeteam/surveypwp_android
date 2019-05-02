@@ -24,7 +24,7 @@ public class SurveyAPI {
 
     public static void getQuestionnaire(Response.Listener<ApiResultAllQuestionnaire> successListener,
                                         Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_ALL_QUESTIONNAIRE;
+        String URL = ApiURL.API_ALL_QUESTIONNAIRE();
 
         Map<String, String> headers = new HashMap<>();
         Map<String, String> params = new HashMap<>();
@@ -39,7 +39,7 @@ public class SurveyAPI {
     public static void addQuestionnaire(final String title, final String description,
                                         Response.Listener<JSONObject> successListener,
                                         Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_ALL_QUESTIONNAIRE;
+        String URL = ApiURL.API_ALL_QUESTIONNAIRE();
 
         JSONObject JRequestObject = new JSONObject();
         try {

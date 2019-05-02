@@ -138,6 +138,11 @@ public class QuestionnaireActivity extends AppCompatActivity
 
     @Override
     public void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID) {
+        for(ModelAnswer answer: listOfAnswers) {
+            SurveyAPI.addUserAnswer(questionnaireID, answer.getQuestion_id(), username, answer.getAnswer(),
+                    addAnswerSuccessListener, addAnswerErrorListener);
+        }
+
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -389,6 +394,20 @@ public class QuestionnaireActivity extends AppCompatActivity
             }
 
             finish();
+        }
+    };
+
+    private Response.Listener<JSONObject> addAnswerSuccessListener = new Response.Listener<JSONObject>() {
+        @Override
+        public void onResponse(JSONObject response) {
+            // The server does not return JSONObject as response...
+        }
+    };
+
+    private Response.ErrorListener addAnswerErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No need of action...
         }
     };
 }

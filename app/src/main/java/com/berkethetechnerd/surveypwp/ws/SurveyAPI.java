@@ -183,4 +183,25 @@ public class SurveyAPI {
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);
     }
+
+    public static void addUserAnswer(final int questionnaire_id, final int question_id,
+                                     String username, String answer,
+                                     Response.Listener<JSONObject> successListener,
+                                     Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_POST_ANSWER(questionnaire_id, question_id);
+
+        JSONObject JRequestObject = new JSONObject();
+        try {
+            JRequestObject.put("content", answer);
+            JRequestObject.put("unique_name", username);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                JRequestObject, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
 }

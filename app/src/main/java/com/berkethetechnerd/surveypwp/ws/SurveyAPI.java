@@ -168,4 +168,19 @@ public class SurveyAPI {
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);
     }
+
+    public static void getUserAnswers(final int questionnaire_id, String username,
+                                      Response.Listener<ApiResultAllAnswers> successListener,
+                                      Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_GET_USER_ANSWERS(questionnaire_id, username);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultAllAnswers> request = new GsonRequest<>(Request.Method.GET, URL,
+                ApiResultAllAnswers.class, headers, params, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
 }

@@ -34,4 +34,8 @@ public class ApiURL {
     public static String API_DELETE_QUESTION(int questionnaire_id, int question_id) {
         return API_POST_QUESTION(questionnaire_id) + question_id + "/";
     }
+
+    public static String API_GET_USER_ANSWERS(int questionnaire_id, String username) {
+        return API_ONE_QUESTIONNAIRE(questionnaire_id) + "/answers/" + username + "/";
+    }
 }

@@ -29,6 +29,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/tv_noSurvey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginXXL"
+                android:layout_marginBottom="@dimen/marginM"
+                android:gravity="center"
+                android:text="@string/app_noSurvey"
+                android:textSize="@dimen/appNoSurveyTextSize"
+                fontPath="fonts/HelvaticaNeue.ttf" />
+
             <ListView
                 android:id="@+id/lv_listQuestionnaire"
                 android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.lv_listQuestionnaire) ListView lvQuestionnaire;
     @BindView(R.id.refreshQuestionnaire) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_noSurvey) TextView tvNoSurvey;
 
     private ArrayList<ModelQuestionnaire> questionnaires;
     private QuestionnaireAdapter adapter;
@@ -85,6 +87,14 @@ public class MainActivity extends AppCompatActivity {
             questionnaires.clear();
             questionnaires.addAll(Arrays.asList(response.getItems()));
             adapter.notifyDataSetChanged();
+
+            if(questionnaires.size() == 0) {
+                lvQuestionnaire.setVisibility(View.GONE);
+                tvNoSurvey.setVisibility(View.VISIBLE);
+            } else {
+                lvQuestionnaire.setVisibility(View.VISIBLE);
+                tvNoSurvey.setVisibility(View.GONE);
+            }
 
             swipeRefreshLayout.setRefreshing(false);
             SharedPrefHelper.setNumQuestionnaire(getApplicationContext(), questionnaires.size());

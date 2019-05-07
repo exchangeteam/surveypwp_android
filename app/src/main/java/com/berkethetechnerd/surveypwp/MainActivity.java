@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         questionnaires = new ArrayList<>();
         adapter = new QuestionnaireAdapter(questionnaires, getApplicationContext());
         lvQuestionnaire.setAdapter(adapter);
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -87,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
             questionnaires.clear();
             questionnaires.addAll(Arrays.asList(response.getItems()));
             adapter.notifyDataSetChanged();
-
             swipeRefreshLayout.setRefreshing(false);
+
             SharedPrefHelper.setNumQuestionnaire(getApplicationContext(), questionnaires.size());
         }
     };
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     private Response.ErrorListener questionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            String msg = error.getMessage();
+            String msg = "Are you sure that you are connected to the internet?";
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         }
     };

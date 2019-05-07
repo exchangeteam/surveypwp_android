@@ -5,18 +5,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.berkethetechnerd.surveypwp.fragment.FragmentAnswerNew;
-import com.berkethetechnerd.surveypwp.fragment.FragmentQuestionnaireEdit;
-import com.berkethetechnerd.surveypwp.fragment.FragmentQuestionnaireNew;
+import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToAnswer;
+import com.berkethetechnerd.surveypwp.fragment.FragmentLogin;
+import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToEdit;
 
 public class PlatformLoginActivity extends AppCompatActivity
-    implements FragmentQuestionnaireNew.OnFragmentInteractionListener,
-        FragmentQuestionnaireEdit.OnFragmentInteractionListener,
-        FragmentAnswerNew.OnFragmentInteractionListener {
+    implements FragmentLogin.OnFragmentInteractionListener,
+        FragmentLoginToEdit.OnFragmentInteractionListener,
+        FragmentLoginToAnswer.OnFragmentInteractionListener {
 
-    private final String TAG_QUESTIONNAIRE_NEW = "fragment_questionnaire_new";
-    private final String TAG_QUESTIONNAIRE_EDIT = "fragment_questionnaire_edit";
-    private final String TAG_ANSWER_NEW = "fragment_answer_new";
+    private final String TAG_LOGIN = "fragment_login";
+    private final String TAG_LOGIN_EDIT = "fragment_login_edit";
+    private final String TAG_LOGIN_ANSWER = "fragment_login_answer";
 
     private final String INTENT_QUESTIONNAIRE_TAG = "fragment_type";
     private final int INTENT_CREATE_QUESTIONNAIRE = 0;
@@ -34,9 +34,9 @@ public class PlatformLoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platform_login);
 
-        FragmentQuestionnaireNew fragmentQuestionnaireNew = FragmentQuestionnaireNew.newInstance("a", "b");
+        FragmentLogin fragmentLogin = FragmentLogin.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.login_content,
-                fragmentQuestionnaireNew, TAG_QUESTIONNAIRE_NEW).commit();
+                fragmentLogin, TAG_LOGIN).commit();
     }
 
     @Override
@@ -52,13 +52,13 @@ public class PlatformLoginActivity extends AppCompatActivity
 
     @Override
     public void editQuestionnairePlatform() {
-        FragmentQuestionnaireEdit fragmentQuestionnaireEdit = FragmentQuestionnaireEdit.newInstance();
+        FragmentLoginToEdit fragmentLoginToEdit = FragmentLoginToEdit.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.replace(R.id.login_content, fragmentQuestionnaireEdit, TAG_QUESTIONNAIRE_EDIT);
-        fragmentTransaction.addToBackStack(TAG_QUESTIONNAIRE_EDIT);
+        fragmentTransaction.replace(R.id.login_content, fragmentLoginToEdit, TAG_LOGIN_EDIT);
+        fragmentTransaction.addToBackStack(TAG_LOGIN_EDIT);
         fragmentTransaction.commit();
     }
 
@@ -74,13 +74,13 @@ public class PlatformLoginActivity extends AppCompatActivity
 
     @Override
     public void answerPlatform() {
-        FragmentAnswerNew fragmentAnswerNew = FragmentAnswerNew.newInstance();
+        FragmentLoginToAnswer fragmentLoginToAnswer = FragmentLoginToAnswer.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right);
-        fragmentTransaction.replace(R.id.login_content, fragmentAnswerNew, TAG_ANSWER_NEW);
-        fragmentTransaction.addToBackStack(TAG_ANSWER_NEW);
+        fragmentTransaction.replace(R.id.login_content, fragmentLoginToAnswer, TAG_LOGIN_ANSWER);
+        fragmentTransaction.addToBackStack(TAG_LOGIN_ANSWER);
         fragmentTransaction.commit();
     }
 

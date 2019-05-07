@@ -18,18 +18,18 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentQuestionnaireEdit.OnFragmentInteractionListener} interface
+ * {@link FragmentLoginToEdit.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentQuestionnaireEdit#newInstance} factory method to
+ * Use the {@link FragmentLoginToEdit#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentQuestionnaireEdit extends Fragment {
+public class FragmentLoginToEdit extends Fragment {
 
     @BindView(R.id.et_QuestionnaireID) EditText etQuestionnaireID;
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentQuestionnaireEdit() {
+    public FragmentLoginToEdit() {
         // Required empty public constructor
     }
 
@@ -37,10 +37,10 @@ public class FragmentQuestionnaireEdit extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment FragmentQuestionnaireEdit.
+     * @return A new instance of fragment FragmentLoginToEdit.
      */
-    public static FragmentQuestionnaireEdit newInstance() {
-        return new FragmentQuestionnaireEdit();
+    public static FragmentLoginToEdit newInstance() {
+        return new FragmentLoginToEdit();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FragmentQuestionnaireEdit extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_questionnaire_edit, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_login_edit, container, false);
         ButterKnife.bind(this, rootView);
 
         return rootView;

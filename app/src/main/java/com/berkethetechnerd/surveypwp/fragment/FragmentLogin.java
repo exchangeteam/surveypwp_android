@@ -19,20 +19,21 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragmentAnswerNew.OnFragmentInteractionListener} interface
+ * {@link FragmentLogin.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragmentAnswerNew#newInstance} factory method to
+ * Use the {@link FragmentLogin#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentAnswerNew extends Fragment {
+public class FragmentLogin extends Fragment {
 
-    @BindView(R.id.et_answerUsername) EditText etAnswerUsername;
-    @BindView(R.id.et_answerQuestionnaireID) EditText etQuestionnaireID;
-    @BindView(R.id.tv_btnAnswerOfUser) TextView tvAnswerOfUser;
+    @BindView(R.id.et_questionnaireTitle) EditText etQuestionnaireTitle;
+    @BindView(R.id.et_questionnaireDescription) EditText etQuestionnaireDesc;
+    @BindView(R.id.tv_btnEditQuestionnaire) TextView tvEditQuestionnaire;
+    @BindView(R.id.tv_btnAnswerPlatform) TextView tvAnswerPlatform;
 
     private OnFragmentInteractionListener mListener;
 
-    public FragmentAnswerNew() {
+    public FragmentLogin() {
         // Required empty public constructor
     }
 
@@ -40,10 +41,10 @@ public class FragmentAnswerNew extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment FragmentAnswerNew.
+     * @return A new instance of fragment FragmentLogin.
      */
-    public static FragmentAnswerNew newInstance() {
-        return new FragmentAnswerNew();
+    public static FragmentLogin newInstance() {
+        return new FragmentLogin();
     }
 
     @Override
@@ -54,10 +55,11 @@ public class FragmentAnswerNew extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_answer_new, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, rootView);
 
-        tvAnswerOfUser.setOnClickListener(anserOfUserClickListener);
+        tvEditQuestionnaire.setOnClickListener(editQuestionnaireClickListener);
+        tvAnswerPlatform.setOnClickListener(answerPlatformClickListener);
 
         return rootView;
     }
@@ -79,31 +81,30 @@ public class FragmentAnswerNew extends Fragment {
         mListener = null;
     }
 
-    @OnClick(R.id.btn_answerQuestionnaire)
-    public void answerQuestionnaire(View v) {
-        String username = etAnswerUsername.getText().toString();
-        String id = etQuestionnaireID.getText().toString();
-        String msg = "You have to fill username and id fields.";
+    @OnClick(R.id.btn_createQuestionnaire)
+    public void createQuestionnaire(View v) {
+        String title = etQuestionnaireTitle.getText().toString();
+        String description = etQuestionnaireDesc.getText().toString();
+        String msg = "Title cannot be empty!";
 
-        if(username.isEmpty() || id.isEmpty()) {
+        if(title.isEmpty()) {
             Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
         } else {
-            mListener.answerQuestionnaire(username, Integer.valueOf(id));
+            mListener.createQuestionnaire(title, description);
         }
     }
 
-    private View.OnClickListener anserOfUserClickListener = new View.OnClickListener() {
+    private View.OnClickListener editQuestionnaireClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            String username = etAnswerUsername.getText().toString();
-            String id = etQuestionnaireID.getText().toString();
-            String msg = "You have to fill username and id fields.";
+            mListener.editQuestionnairePlatform();
+        }
+    };
 
-            if(username.isEmpty() || id.isEmpty()) {
-                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-            } else {
-                mListener.seeAnswerOfUser(username, Integer.valueOf(id));
-            }
+    private View.OnClickListener answerPlatformClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mListener.answerPlatform();
         }
     };
 
@@ -118,7 +119,8 @@ public class FragmentAnswerNew extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void answerQuestionnaire(String username, int id);
-        void seeAnswerOfUser(String username, int id);
+        void createQuestionnaire(String title, String description);
+        void editQuestionnairePlatform();
+        void answerPlatform();
     }
 }

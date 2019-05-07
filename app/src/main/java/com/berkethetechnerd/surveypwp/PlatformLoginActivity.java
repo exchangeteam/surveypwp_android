@@ -1,5 +1,6 @@
 package com.berkethetechnerd.surveypwp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToAnswer;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLogin;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToEdit;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class PlatformLoginActivity extends AppCompatActivity
     implements FragmentLogin.OnFragmentInteractionListener,
@@ -37,6 +40,15 @@ public class PlatformLoginActivity extends AppCompatActivity
         FragmentLogin fragmentLogin = FragmentLogin.newInstance();
         getSupportFragmentManager().beginTransaction().add(R.id.login_content,
                 fragmentLogin, TAG_LOGIN).commit();
+    }
+
+    /**
+     * Font set up for the activity.
+     * @param newBase: The context which the fonts will be set on.
+     */
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
     @Override

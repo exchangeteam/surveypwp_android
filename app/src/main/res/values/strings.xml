@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">SurveyPWP</string>
     <string name="app_btnPlatform">Go to Questionnaire Platform</string>
-    <string name="app_noSurvey">Currently, there are isn\'t any questionnaire stored in our system.</string>
 
     <string name="allQuestionnaire">Questionnaire</string>
     <string name="allQuestions">Questions</string>

@@ -8,7 +8,6 @@
     <dimen name="marginXXL">64dp</dimen>
 
     <dimen name="appNameTextSize">64sp</dimen>
-    <dimen name="appNoSurveyTextSize">24sp</dimen>
     <dimen name="allQuestionnaireTitleTextSize">18sp</dimen>
     <dimen name="allQuestionnaireDescriptionTextSize">16sp</dimen>
     <dimen name="allQuestionWelcomeTextSize">20sp</dimen>

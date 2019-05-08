@@ -120,8 +120,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
 
                     final View view = layoutInflater.inflate(R.layout.dialog_add_answer, null);
                     alertDialog.setView(view);
-                    alertDialog.setTitle(getContext().getResources().getString(R.string.dialog_editQuestionnaireTitle));
-                    alertDialog.setMessage(getContext().getResources().getString(R.string.dialog_editQuestionMessage));
+                    alertDialog.setTitle(getContext().getResources().getString(R.string.dialog_answerTitle));
 
                     final EditText etAnswer = view.findViewById(R.id.et_newAnswerBox);
 
@@ -135,6 +134,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
                                 Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                             } else {
                                 question.setContent(Qanswer);
+                                viewHolder.etAnswer.setText(Qanswer);
                                 dialog.dismiss();
                             }
                         }

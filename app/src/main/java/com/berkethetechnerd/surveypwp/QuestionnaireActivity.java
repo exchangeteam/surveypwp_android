@@ -184,7 +184,10 @@ public class QuestionnaireActivity extends AppCompatActivity
     private Response.ErrorListener getOneQuestionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            // No error handling...
+            String msg = "The questionnaire does not exist!";
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+
+            finish();
         }
     };
 

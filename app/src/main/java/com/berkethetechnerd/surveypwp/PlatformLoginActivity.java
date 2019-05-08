@@ -1,16 +1,18 @@
 package com.berkethetechnerd.surveypwp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.error.VolleyError;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToAnswer;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLogin;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToEdit;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import com.berkethetechnerd.surveypwp.model.ApiResultOneQuestionnaire;
+import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
 
 public class PlatformLoginActivity extends AppCompatActivity
     implements FragmentLogin.OnFragmentInteractionListener,
@@ -32,6 +34,11 @@ public class PlatformLoginActivity extends AppCompatActivity
     private final String INTENT_QUESTIONNAIRE_EXTRA_USERNAME = "questionnaire_username";
     private final String INTENT_QUESTIONNAIRE_EXTRA_ID = "questionnaire_id";
 
+    private String Qtitle;
+    private String Qdescription;
+    private String Qusername;
+    private int Qid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +51,9 @@ public class PlatformLoginActivity extends AppCompatActivity
 
     @Override
     public void createQuestionnaire(String title, String description) {
+        Qtitle = title;
+        Qdescription = description;
+
         Intent createIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
         createIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_CREATE_QUESTIONNAIRE);
         createIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_TITLE, title);
@@ -67,12 +77,8 @@ public class PlatformLoginActivity extends AppCompatActivity
 
     @Override
     public void editQuestionnaire(int id) {
-        Intent editIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
-        editIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_EDIT_QUESTIONNAIRE);
-        editIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, id);
-
-        startActivity(editIntent);
-        finish();
+        Qid = id;
+        SurveyAPI.getOneQuestionnaire(id, editSuccessListener, editErrorListener);
     }
 
     @Override
@@ -89,17 +95,17 @@ public class PlatformLoginActivity extends AppCompatActivity
 
     @Override
     public void answerQuestionnaire(String username, int id) {
-        Intent answerIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
-        answerIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_ANSWER_QUESTIONNAIRE);
-        answerIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME, username);
-        answerIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, id);
+        Qusername = username;
+        Qid = id;
 
-        startActivity(answerIntent);
-        finish();
+        SurveyAPI.getOneQuestionnaire(id, answerSuccessListener, answerErrorListener);
     }
 
     @Override
     public void seeAnswerOfUser(String username, int id) {
+        Qusername = username;
+        Qid = id;
+
         Intent answerOfUserIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
         answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_SEE_ANSWER_OF_USER);
         answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME, username);
@@ -108,4 +114,45 @@ public class PlatformLoginActivity extends AppCompatActivity
         startActivity(answerOfUserIntent);
         finish();
     }
+
+    private Response.Listener<ApiResultOneQuestionnaire> editSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+        @Override
+        public void onResponse(ApiResultOneQuestionnaire response) {
+            Intent editIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
+            editIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_EDIT_QUESTIONNAIRE);
+            editIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, Qid);
+
+            startActivity(editIntent);
+            finish();
+        }
+    };
+
+    private Response.ErrorListener editErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            String msg = "The questionnaire does not exist!";
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private Response.Listener<ApiResultOneQuestionnaire> answerSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+        @Override
+        public void onResponse(ApiResultOneQuestionnaire response) {
+            Intent answerIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
+            answerIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_ANSWER_QUESTIONNAIRE);
+            answerIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME, Qusername);
+            answerIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, Qid);
+
+            startActivity(answerIntent);
+            finish();
+        }
+    };
+
+    private Response.ErrorListener answerErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            String msg = "The questionnaire does not exist!";
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    };
 }

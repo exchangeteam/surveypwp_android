@@ -70,6 +70,26 @@ public class SurveyAPI {
         coreApi.addToRequestQueue(request);
     }
 
+    public static void editQuestionnaire(final int id, String title, String description,
+                                         Response.Listener<JSONObject> successListener,
+                                         Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_EDIT_QUESTIONNAIRE(id);
+
+        JSONObject JRequestObject = new JSONObject();
+        try {
+            JRequestObject.put("title", title);
+            JRequestObject.put("description", description);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, URL,
+                JRequestObject, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
     public static void deleteQuestionnaire(final int id, Response.Listener<ApiResultNoData> successListener,
                                            Response.ErrorListener errorListener) {
         String URL = ApiURL.API_DELETE_QUESTIONNAIRE(id);

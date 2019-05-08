@@ -37,6 +37,7 @@ public class FragmentEditQuestionnaire extends Fragment
 
     @BindView(R.id.tv_editQuestionnaireTitle) TextView tvTitle;
     @BindView(R.id.tv_editQuestionnaireDescription) TextView tvDescription;
+    @BindView(R.id.tv_editQuestionnaireEdit) TextView tvEdit;
     @BindView(R.id.tv_editQuestionnaireDelete) TextView tvDelete;
     @BindView(R.id.lv_editQuestions) ListView lvQuestions;
 
@@ -47,6 +48,8 @@ public class FragmentEditQuestionnaire extends Fragment
     private ArrayList<ModelQuestion> questions;
     private ArrayList<ModelQuestion> dataToSubmit;
     private QuestionAdapter adapter;
+    private String Qtitle;
+    private String Qdescription;
     private int Qid;
 
     private OnFragmentInteractionListener mListener;
@@ -91,6 +94,8 @@ public class FragmentEditQuestionnaire extends Fragment
         if(args != null) {
             String title = getArguments().getString(ARG_TITLE) + " (ID: " + String.valueOf(getArguments().getInt(ARG_ID)) + ")";
             String description = getArguments().getString(ARG_DESC);
+            Qtitle = getArguments().getString(ARG_TITLE);
+            Qdescription = getArguments().getString(ARG_DESC);
             Qid = getArguments().getInt(ARG_ID);
 
             if(description == null || description.isEmpty()) {
@@ -106,6 +111,62 @@ public class FragmentEditQuestionnaire extends Fragment
         adapter = new QuestionAdapter(questions, getContext(), this);
         lvQuestions.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        tvEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+
+                final View view = layoutInflater.inflate(R.layout.dialog_add_question, null);
+                alertDialog.setView(view);
+                alertDialog.setTitle(getResources().getString(R.string.dialog_editQuestionnaireTitle));
+                alertDialog.setMessage(getResources().getString(R.string.dialog_editQuestionMessage));
+
+                final EditText etTitle = view.findViewById(R.id.et_newQuestionTitle);
+                final EditText etDescription = view.findViewById(R.id.et_newQuestionDescription);
+
+                etTitle.setText(Qtitle);
+                etDescription.setText(Qdescription);
+
+                alertDialog.setPositiveButton(getResources().getString(R.string.btn_edit), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String Ctitle = etTitle.getText().toString();
+                        String Cdescription = etDescription.getText().toString();
+                        String msg = "Title cannot be empty!";
+
+                        if(Ctitle.isEmpty()) {
+                            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Qtitle = Ctitle;
+                            Qdescription = Cdescription;
+
+                            Ctitle = "Title: " + Qtitle + " (ID: " + Qid + ")";
+                            if(Qdescription.isEmpty()) {
+                                Cdescription = "No description provided.";
+                            } else {
+                                Cdescription = "Description: " + Qdescription;
+                            }
+
+                            tvTitle.setText(Ctitle);
+                            tvDescription.setText(Cdescription);
+
+                            mListener.editQuestionnaireInformation(Qid, Qtitle, Qdescription);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                alertDialog.setNegativeButton(getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
 
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,6 +351,7 @@ public class FragmentEditQuestionnaire extends Fragment
      */
     public interface OnFragmentInteractionListener {
         void submitEditQuestionnaire(ArrayList<ModelQuestion> listOfQuestions, int questionnaireID);
+        void editQuestionnaireInformation(int id, String title, String description);
         void deleteQuestionnaire(int id);
     }
 }

@@ -5,6 +5,7 @@
     <string name="allQuestionnaire">Questionnaire</string>
     <string name="allQuestions">Questions</string>
 
+    <string name="editQuestionnaire">Edit title or description</string>
     <string name="deleteQuestionnaire">Delete this questionnaire</string>
 
     <string name="btn_editQuestionnaire">Edit your questionnaire</string>
@@ -30,6 +31,8 @@
     <string name="hint_answer_username">Username</string>
     <string name="hint_answer_content">Type your answer..</string>
 
+    <string name="dialog_editQuestionnaireTitle">Edit questionnaire</string>
+    <string name="dialog_editQuestionnaireMessage">Edit your questionnaire\'s title and description.</string>
     <string name="dialog_newQuestionTitle">New question</string>
     <string name="dialog_newQuestionMessage">Enter a title for the question. Description is not mandatory.</string>
     <string name="dialog_editQuestionTitle">Edit question</string>

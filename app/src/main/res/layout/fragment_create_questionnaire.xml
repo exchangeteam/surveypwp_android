@@ -47,6 +47,19 @@
             android:textSize="@dimen/allQuestionnaireDescriptionTextSize" />
 
         <TextView
+            android:id="@+id/tv_questionnaireEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginEnd="@dimen/marginS"
+            android:layout_marginBottom="@dimen/marginS"
+            android:gravity="end"
+            android:textSize="@dimen/allQuestionnaireDescriptionTextSize"
+            android:textColor="@color/editColor"
+            android:text="@string/editQuestionnaire"/>
+
+        <TextView
             android:id="@+id/tv_questionnaireDelete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -19,6 +19,10 @@ public class ApiURL {
         return API_BASE_URL + "api/questionnaires/" + questionnaire_id + "/";
     }
 
+    public static String API_EDIT_QUESTIONNAIRE(int questionnaire_id) {
+        return API_BASE_URL + "api/questionnaires/" + questionnaire_id + "/";
+    }
+
     public static String API_GET_QUESTIONS(int questionnaire_id) {
         return API_BASE_URL + "api/questionnaires/" + questionnaire_id + "/" + "questions/";
     }

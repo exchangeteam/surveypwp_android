@@ -101,6 +101,11 @@ public class QuestionnaireActivity extends AppCompatActivity
     }
 
     @Override
+    public void editQuestionnaireInformation(int questionnaireID, String title, String description) {
+        SurveyAPI.editQuestionnaire(questionnaireID, title, description, editQuestionnaireSuccessListener, editQuestionnaireErrorListener);
+    }
+
+    @Override
     public void deleteQuestionnaire(final int id) {
         SurveyAPI.deleteQuestionnaire(id, deleteQuestionnaireSuccessListener, deleteQuestionnaireErrorListener);
     }

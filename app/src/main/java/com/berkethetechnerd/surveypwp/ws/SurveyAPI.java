@@ -3,7 +3,6 @@ package com.berkethetechnerd.surveypwp.ws;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.request.JsonObjectRequest;
-import com.android.volley.request.StringRequest;
 import com.berkethetechnerd.surveypwp.ApplicationClass;
 import com.berkethetechnerd.surveypwp.helper.ApiURL;
 import com.berkethetechnerd.surveypwp.model.ApiResultAllAnswers;
@@ -23,8 +22,8 @@ public class SurveyAPI {
     // The coreApi instance for the application.
     private static CoreApi coreApi = ApplicationClass.getCoreApi();
 
-    public static void getQuestionnaire(Response.Listener<ApiResultAllQuestionnaire> successListener,
-                                        Response.ErrorListener errorListener) {
+    public static void getAllQuestionnaire(Response.Listener<ApiResultAllQuestionnaire> successListener,
+                                           Response.ErrorListener errorListener) {
         String URL = ApiURL.API_ALL_QUESTIONNAIRE();
 
         Map<String, String> headers = new HashMap<>();
@@ -37,10 +36,10 @@ public class SurveyAPI {
         coreApi.addToRequestQueue(request);
     }
 
-    public static void addQuestionnaire(final String title, final String description,
-                                        Response.Listener<JSONObject> successListener,
-                                        Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_ALL_QUESTIONNAIRE();
+    public static void postQuestionnaire(final String title, final String description,
+                                         Response.Listener<JSONObject> successListener,
+                                         Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_POST_QUESTIONNAIRE();
 
         JSONObject JRequestObject = new JSONObject();
         try {
@@ -59,13 +58,27 @@ public class SurveyAPI {
 
     public static void getOneQuestionnaire(final int id, Response.Listener<ApiResultOneQuestionnaire>
                                            successListener, Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_ONE_QUESTIONNAIRE(id);
+        String URL = ApiURL.API_GET_ONE_QUESTIONNAIRE(id);
 
         Map<String, String> headers = new HashMap<>();
         Map<String, String> params = new HashMap<>();
 
         GsonRequest<ApiResultOneQuestionnaire> request = new GsonRequest<>(Request.Method.GET, URL,
                 ApiResultOneQuestionnaire.class, headers, params, successListener, errorListener);
+
+        coreApi.getRequestQueue().getCache().clear();
+        coreApi.addToRequestQueue(request);
+    }
+
+    public static void deleteQuestionnaire(final int id, Response.Listener<ApiResultNoData> successListener,
+                                           Response.ErrorListener errorListener) {
+        String URL = ApiURL.API_DELETE_QUESTIONNAIRE(id);
+
+        Map<String, String> headers = new HashMap<>();
+        Map<String, String> params = new HashMap<>();
+
+        GsonRequest<ApiResultNoData> request = new GsonRequest<>(Request.Method.DELETE, URL,
+                ApiResultNoData.class, headers, params, successListener, errorListener);
 
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);
@@ -100,34 +113,6 @@ public class SurveyAPI {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
                 JRequestObject, successListener, errorListener);
-
-        coreApi.getRequestQueue().getCache().clear();
-        coreApi.addToRequestQueue(request);
-    }
-
-    public static void getAnswers(final int id, Response.Listener<ApiResultAllAnswers> successListener,
-                                  Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_GET_QUESTIONS(id);
-
-        Map<String, String> headers = new HashMap<>();
-        Map<String, String> params = new HashMap<>();
-
-        GsonRequest<ApiResultAllAnswers> request = new GsonRequest<>(Request.Method.GET, URL,
-                ApiResultAllAnswers.class, headers, params, successListener, errorListener);
-
-        coreApi.getRequestQueue().getCache().clear();
-        coreApi.addToRequestQueue(request);
-    }
-
-    public static void deleteQuestionnaire(final int id, Response.Listener<ApiResultNoData> successListener,
-                                           Response.ErrorListener errorListener) {
-        String URL = ApiURL.API_DELETE_QUESTIONNAIRE(id);
-
-        Map<String, String> headers = new HashMap<>();
-        Map<String, String> params = new HashMap<>();
-
-        GsonRequest<ApiResultNoData> request = new GsonRequest<>(Request.Method.DELETE, URL,
-                ApiResultNoData.class, headers, params, successListener, errorListener);
 
         coreApi.getRequestQueue().getCache().clear();
         coreApi.addToRequestQueue(request);

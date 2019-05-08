@@ -3,7 +3,6 @@ package com.berkethetechnerd.surveypwp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -49,15 +48,6 @@ public class QuestionnaireActivity extends AppCompatActivity
     private String Qusername;
     private int Qid;
 
-    // TODO: In edit, questionnaire cannot be deleted.
-    // TODO: In edit, questionnaire title and desc cannot be changed.
-    // TODO: In create, questionnaire title and desc cannot be changed.
-    // TODO: In create, questionnaire cannot be deleted.
-    // TODO: In create, submit does not work
-    // TODO: In edit, submit does not work.
-    // TODO: Add a label on top of page "Questionnaire", for both edit and create.
-    // TODO: Error handling..
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +60,7 @@ public class QuestionnaireActivity extends AppCompatActivity
             case INTENT_CREATE_QUESTIONNAIRE:
                 Qtitle = callerIntent.getStringExtra(INTENT_QUESTIONNAIRE_EXTRA_TITLE);
                 Qdescription = callerIntent.getStringExtra(INTENT_QUESTIONNAIRE_EXTRA_DESCRIPTION);
-                SurveyAPI.addQuestionnaire(Qtitle, Qdescription, addQuestionnaireSuccessListener, addQuestionnaireErrorListener);
+                SurveyAPI.postQuestionnaire(Qtitle, Qdescription, postQuestionnaireSuccessListener, postQuestionnaireErrorListener);
 
                 break;
 
@@ -83,14 +73,14 @@ public class QuestionnaireActivity extends AppCompatActivity
             case INTENT_ANSWER_QUESTIONNAIRE:
                 Qusername = callerIntent.getStringExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME);
                 Qid = callerIntent.getIntExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, 0);
-                SurveyAPI.getOneQuestionnaire(Qid, getOneQuestionnaireForAnswerSuccessListener, getOneQuestionnaireForAnswerErrorListener);
+                SurveyAPI.getOneQuestionnaire(Qid, getOneQuestionnaireAnswerSuccessListener, getOneQuestionnaireAnswerErrorListener);
 
                 break;
 
             case INTENT_SEE_ANSWER_OF_USER:
                 Qusername = callerIntent.getStringExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME);
                 Qid = callerIntent.getIntExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, 0);
-                SurveyAPI.getOneQuestionnaire(Qid, getOneQuestionnaireForUserSuccessListener, getOneQuestionnaireForUserErrorListener);
+                SurveyAPI.getOneQuestionnaire(Qid, getOneQuestionnaireUserSuccessListener, getOneQuestionnaireUserErrorListener);
 
                 break;
         }
@@ -102,7 +92,7 @@ public class QuestionnaireActivity extends AppCompatActivity
             String title = question.getTitle();
             String description = question.getDescription();
 
-            SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+            SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionToQuestionnaireSuccessListener, addQuestionToQuestionnaireErrorListener);
         }
 
         Toast.makeText(getApplicationContext(), "Received the submit", Toast.LENGTH_SHORT).show();
@@ -111,7 +101,7 @@ public class QuestionnaireActivity extends AppCompatActivity
 
     @Override
     public void deleteQuestionnaire(final int id) {
-        SurveyAPI.deleteQuestionnaire(id, questionnaireDeleteSuccessListener, questionnaireDeleteErrorListener);
+        SurveyAPI.deleteQuestionnaire(id, deleteQuestionnaireSuccessListener, deleteQuestionnaireErrorListener);
     }
 
     @Override
@@ -122,10 +112,10 @@ public class QuestionnaireActivity extends AppCompatActivity
             int question_id = question.getId();
 
             if(question.isDeleted()) {
-                SurveyAPI.deleteQuestion(questionnaireID, question_id, questionDeleteSuccessListener, questionDeleteErrorListener);
+                SurveyAPI.deleteQuestion(questionnaireID, question_id, deleteQuestionSuccessListener, deleteQuestionErrorListener);
             } else {
                 if(question_id == 0) {
-                    SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionSuccessListener, addQuestionErrorListener);
+                    SurveyAPI.addQuestion(questionnaireID, title, description, addQuestionToQuestionnaireSuccessListener, addQuestionToQuestionnaireErrorListener);
                 } else {
                     SurveyAPI.editQuestion(questionnaireID, question_id, title, description, editQuestionnaireSuccessListener, editQuestionnaireErrorListener);
                 }
@@ -137,9 +127,9 @@ public class QuestionnaireActivity extends AppCompatActivity
     }
 
     @Override
-    public void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID) {
-        for(ModelAnswer answer: listOfAnswers) {
-            SurveyAPI.addUserAnswer(questionnaireID, answer.getQuestion_id(), username, answer.getAnswer(),
+    public void submitAnswerQuestionnaire(ArrayList<ModelQuestion> listOfAnswers, String username, int questionnaireID) {
+        for(ModelQuestion answer: listOfAnswers) {
+            SurveyAPI.addUserAnswer(questionnaireID, answer.getId(), username, answer.getContent(),
                     addAnswerSuccessListener, addAnswerErrorListener);
         }
 
@@ -152,14 +142,14 @@ public class QuestionnaireActivity extends AppCompatActivity
         finish();
     }
 
-    private Response.Listener<JSONObject> addQuestionnaireSuccessListener = new Response.Listener<JSONObject>() {
+    private Response.Listener<JSONObject> postQuestionnaireSuccessListener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
             // The server does not return JSONObject as response...
         }
     };
 
-    private Response.ErrorListener addQuestionnaireErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener postQuestionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             int numOfQuestionnaire = SharedPrefHelper.getNumQuestionnaire(getApplicationContext());
@@ -181,15 +171,7 @@ public class QuestionnaireActivity extends AppCompatActivity
             Qtitle = response.getTitle();
             Qdescription = response.getDescription();
 
-            FragmentEditQuestionnaire fragmentEditQuestionnaire = FragmentEditQuestionnaire.newInstance(
-                    Qtitle, Qdescription, Qid
-            );
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.questionnaire_content, fragmentEditQuestionnaire, TAG_EDIT_QUESTIONNAIRE)
-                    .commit();
-
-            SurveyAPI.getQuestions(Qid, getQuestionsSuccessListener, getQuestionsErrorListener);
+            SurveyAPI.getQuestions(Qid, getOneQuestionnaireQuestionsSuccessListener, getOneQuestionnaireQuestionsErrorListener);
         }
     };
 
@@ -200,10 +182,57 @@ public class QuestionnaireActivity extends AppCompatActivity
         }
     };
 
-    private Response.Listener<ApiResultAllQuestions> getQuestionsSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
+    private Response.Listener<ApiResultAllQuestions> getOneQuestionnaireQuestionsSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
         @Override
         public void onResponse(ApiResultAllQuestions response) {
-            FragmentEditQuestionnaire fragment = (FragmentEditQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_EDIT_QUESTIONNAIRE);
+            FragmentEditQuestionnaire fragmentEditQuestionnaire = FragmentEditQuestionnaire.newInstance(
+                    Qtitle, Qdescription, Qid
+            );
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.questionnaire_content, fragmentEditQuestionnaire, TAG_EDIT_QUESTIONNAIRE)
+                    .commit();
+
+            fragmentEditQuestionnaire.setQuestionData(response.getItems());
+        }
+    };
+
+    private Response.ErrorListener getOneQuestionnaireQuestionsErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No error handling...
+        }
+    };
+
+    private Response.Listener<ApiResultOneQuestionnaire> getOneQuestionnaireAnswerSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+        @Override
+        public void onResponse(ApiResultOneQuestionnaire response) {
+            Qtitle = response.getTitle();
+            Qdescription = response.getDescription();
+
+            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
+                    Qtitle, Qdescription, Qusername, Qid
+            );
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
+                    .commit();
+
+            SurveyAPI.getQuestions(Qid, getOneQuestionnaireQuestionsAnswerSuccessListener, getOneQuestionnaireQuestionsAnswerErrorListener);
+        }
+    };
+
+    private Response.ErrorListener getOneQuestionnaireAnswerErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            // No error handling...
+        }
+    };
+
+    private Response.Listener<ApiResultAllQuestions> getOneQuestionnaireQuestionsAnswerSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
+        @Override
+        public void onResponse(ApiResultAllQuestions response) {
+            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
 
             if(fragment != null) {
                 fragment.setQuestionData(response.getItems());
@@ -211,71 +240,103 @@ public class QuestionnaireActivity extends AppCompatActivity
         }
     };
 
-    private Response.ErrorListener getQuestionsErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener getOneQuestionnaireQuestionsAnswerErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
         }
     };
 
-    private Response.Listener<ApiResultOneQuestionnaire> getOneQuestionnaireForAnswerSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+    private Response.Listener<ApiResultOneQuestionnaire> getOneQuestionnaireUserSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
         @Override
         public void onResponse(ApiResultOneQuestionnaire response) {
             Qtitle = response.getTitle();
             Qdescription = response.getDescription();
 
-            FragmentAnswerQuestionnaire fragmentEditQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
+            SurveyAPI.getQuestions(Qid, getOneQuestionnaireQuestionsUserSuccessListener, getOneQuestionnaireQuestionsUserErrorListener);
+        }
+    };
+
+    private Response.ErrorListener getOneQuestionnaireUserErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            int errorCode = error.networkResponse.statusCode;
+
+            if(errorCode == 404) {
+                String msg = "The questionnaire does not exist!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+
+            finish();
+        }
+    };
+
+    private Response.Listener<ApiResultAllQuestions> getOneQuestionnaireQuestionsUserSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
+        @Override
+        public void onResponse(ApiResultAllQuestions response) {
+            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
                     Qtitle, Qdescription, Qusername, Qid
             );
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.questionnaire_content, fragmentEditQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
+                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
                     .commit();
 
-            SurveyAPI.getAnswers(Qid, getQuestionsForAnswerSuccessListener, getQuestionsForAnswerErrorListener);
+            fragmentAnswerQuestionnaire.setQuestionData(response.getItems());
+            SurveyAPI.getUserAnswers(Qid, Qusername, getUserAnswersSuccessListener, getUserAnswersErrorListener);
         }
     };
 
-    private Response.ErrorListener getOneQuestionnaireForAnswerErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener getOneQuestionnaireQuestionsUserErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
         }
     };
 
-    private Response.Listener<ApiResultAllAnswers> getQuestionsForAnswerSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
+    private Response.Listener<ApiResultAllAnswers> getUserAnswersSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
         @Override
         public void onResponse(ApiResultAllAnswers response) {
             FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
 
             if(fragment != null) {
-                fragment.setAnswerData(response.getItems());
+                fragment.setAnswerContent(response.getItems());
             }
         }
     };
 
-    private Response.ErrorListener getQuestionsForAnswerErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener getUserAnswersErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            // No error handling...
+            int errorCode = error.networkResponse.statusCode;
+
+            if(errorCode == 405) {
+                String msg = "The user does not exist for this questionnaire!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            } else if(errorCode == 404) {
+                String msg = "The questionnaire does not exist!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+
+            finish();
         }
     };
 
-    private Response.Listener<JSONObject> addQuestionSuccessListener = new Response.Listener<JSONObject>() {
+    private Response.Listener<JSONObject> addQuestionToQuestionnaireSuccessListener = new Response.Listener<JSONObject>() {
         @Override
         public void onResponse(JSONObject response) {
             // The server does not return JSONObject as response...
         }
     };
 
-    private Response.ErrorListener addQuestionErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener addQuestionToQuestionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             // No need of action...
         }
     };
 
-    private Response.Listener<ApiResultNoData> questionnaireDeleteSuccessListener = new Response.Listener<ApiResultNoData>() {
+    private Response.Listener<ApiResultNoData> deleteQuestionnaireSuccessListener = new Response.Listener<ApiResultNoData>() {
         @Override
         public void onResponse(ApiResultNoData response) {
             Toast.makeText(getApplicationContext(), "Questionnaire deleted", Toast.LENGTH_SHORT).show();
@@ -283,7 +344,7 @@ public class QuestionnaireActivity extends AppCompatActivity
         }
     };
 
-    private Response.ErrorListener questionnaireDeleteErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener deleteQuestionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
@@ -300,100 +361,21 @@ public class QuestionnaireActivity extends AppCompatActivity
     private Response.ErrorListener editQuestionnaireErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.v("ERROR", error.toString());
+            // No error handling...
         }
     };
 
-    private Response.Listener<ApiResultNoData> questionDeleteSuccessListener = new Response.Listener<ApiResultNoData>() {
+    private Response.Listener<ApiResultNoData> deleteQuestionSuccessListener = new Response.Listener<ApiResultNoData>() {
         @Override
         public void onResponse(ApiResultNoData response) {
             // No need of action...
         }
     };
 
-    private Response.ErrorListener questionDeleteErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener deleteQuestionErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             // No error handling...
-        }
-    };
-
-    private Response.Listener<ApiResultOneQuestionnaire> getOneQuestionnaireForUserSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
-        @Override
-        public void onResponse(ApiResultOneQuestionnaire response) {
-            Qtitle = response.getTitle();
-            Qdescription = response.getDescription();
-
-            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
-                    Qtitle, Qdescription, Qusername, Qid
-            );
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
-                    .commit();
-
-            SurveyAPI.getAnswers(Qid, getQuestionsForUserSuccessListener, getQuestionsForUserErrorListener);
-        }
-    };
-
-    private Response.ErrorListener getOneQuestionnaireForUserErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            int errorCode = error.networkResponse.statusCode;
-
-            if(errorCode == 404) {
-                String msg = "The questionnaire does not exist!";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-
-            finish();
-        }
-    };
-
-    private Response.Listener<ApiResultAllAnswers> getQuestionsForUserSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
-        @Override
-        public void onResponse(ApiResultAllAnswers response) {
-            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
-
-            if(fragment != null) {
-                fragment.setAnswerData(response.getItems());
-                SurveyAPI.getUserAnswers(Qid, Qusername, userAnswersSuccessListener, userAnswersErrorListener);
-            }
-        }
-    };
-
-    private Response.ErrorListener getQuestionsForUserErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            // No error handling...
-        }
-    };
-
-    private Response.Listener<ApiResultAllAnswers> userAnswersSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
-        @Override
-        public void onResponse(ApiResultAllAnswers response) {
-            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
-
-            if(fragment != null) {
-                fragment.setAnswerContent(response.getItems());
-            }
-        }
-    };
-
-    private Response.ErrorListener userAnswersErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            int errorCode = error.networkResponse.statusCode;
-
-            if(errorCode == 405) {
-                String msg = "The user does not exist for this questionnaire!";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            } else if(errorCode == 404) {
-                String msg = "The questionnaire does not exist!";
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-
-            finish();
         }
     };
 

@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getRecentQuestionnaire() {
-        SurveyAPI.getQuestionnaire(questionnaireListener, questionnaireErrorListener);
+        SurveyAPI.getAllQuestionnaire(questionnaireListener, questionnaireErrorListener);
     }
 
     private Response.Listener<ApiResultAllQuestionnaire> questionnaireListener = new Response.Listener<ApiResultAllQuestionnaire>() {

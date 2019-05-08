@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.berkethetechnerd.surveypwp.R;
 import com.berkethetechnerd.surveypwp.adapter.AnswerAdapter;
 import com.berkethetechnerd.surveypwp.model.ModelAnswer;
+import com.berkethetechnerd.surveypwp.model.ModelQuestion;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ public class FragmentAnswerQuestionnaire extends Fragment {
     private static final String ARG_ID = "questionnaire_id";
     private static final String ARG_USER = "questionnaire_user";
 
-    private ArrayList<ModelAnswer> answers;
+    private ArrayList<ModelQuestion> questions;
     private AnswerAdapter adapter;
     private String Qusername;
     private int Qid;
@@ -68,7 +69,9 @@ public class FragmentAnswerQuestionnaire extends Fragment {
         args.putString(ARG_DESC, desc);
         args.putInt(ARG_ID, id);
         args.putString(ARG_USER, username);
+
         fragment.setArguments(args);
+        fragment.questions = new ArrayList<>();
 
         return fragment;
     }
@@ -76,7 +79,6 @@ public class FragmentAnswerQuestionnaire extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        answers = new ArrayList<>();
     }
 
     @Override
@@ -105,9 +107,11 @@ public class FragmentAnswerQuestionnaire extends Fragment {
             tvWelcome.setText(welcomeText);
         }
 
-        adapter = new AnswerAdapter(answers, getContext());
-        lvAnswers.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        if(adapter == null) {
+            adapter = new AnswerAdapter(questions, getContext());
+            lvAnswers.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
 
         return rootView;
     }
@@ -131,7 +135,7 @@ public class FragmentAnswerQuestionnaire extends Fragment {
 
     @OnClick(R.id.btn_answerSubmitQuestionnaire)
     public void submitQuestionnaire(View v) {
-        mListener.submitAnswerQuestionnaire(answers, Qusername, Qid);
+        mListener.submitAnswerQuestionnaire(questions, Qusername, Qid);
     }
 
     @OnClick(R.id.btn_goBack)
@@ -139,21 +143,38 @@ public class FragmentAnswerQuestionnaire extends Fragment {
         mListener.returnHomePage();
     }
 
-    public void setAnswerData(ModelAnswer[] data) {
-        answers.clear();
-        answers.addAll(Arrays.asList(data));
-        adapter.notifyDataSetChanged();
+    public void setQuestionData(ModelQuestion[] data) {
+        questions.clear();
+        questions.addAll(Arrays.asList(data));
+
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter = new AnswerAdapter(questions, getContext());
+            lvAnswers.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void setAnswerContent(ModelAnswer[] items) {
-        for(int i = 0; i < items.length; i++) {
-            answers.get(i).setAnswer(items[i].getAnswer());
+        for(ModelAnswer answer: items) {
+            for(ModelQuestion question: questions) {
+                if(question.getId() == answer.getQuestion_id()) {
+                    question.setContent(answer.getAnswer());
+                }
+            }
+        }
+
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        } else {
+            adapter = new AnswerAdapter(questions, getContext());
+            lvAnswers.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
         btnGoBack.setVisibility(View.VISIBLE);
         btnSubmit.setVisibility(View.GONE);
-
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -167,7 +188,7 @@ public class FragmentAnswerQuestionnaire extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void submitAnswerQuestionnaire(ArrayList<ModelAnswer> listOfAnswers, String username, int questionnaireID);
+        void submitAnswerQuestionnaire(ArrayList<ModelQuestion> listOfAnswers, String username, int questionnaireID);
         void returnHomePage();
     }
 }

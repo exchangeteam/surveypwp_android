@@ -42,15 +42,6 @@ public class PlatformLoginActivity extends AppCompatActivity
                 fragmentLogin, TAG_LOGIN).commit();
     }
 
-    /**
-     * Font set up for the activity.
-     * @param newBase: The context which the fonts will be set on.
-     */
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
     @Override
     public void createQuestionnaire(String title, String description) {
         Intent createIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);

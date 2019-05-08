@@ -68,7 +68,10 @@ public class FragmentEditQuestionnaire extends Fragment
         args.putString(ARG_TITLE, title);
         args.putString(ARG_DESC, desc);
         args.putInt(ARG_ID, id);
+
         fragment.setArguments(args);
+        fragment.questions = new ArrayList<>();
+        fragment.dataToSubmit = new ArrayList<>();
 
         return fragment;
     }
@@ -76,8 +79,6 @@ public class FragmentEditQuestionnaire extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        questions = new ArrayList<>();
-        dataToSubmit = new ArrayList<>();
     }
 
     @Override
@@ -175,7 +176,7 @@ public class FragmentEditQuestionnaire extends Fragment
                 if(title.isEmpty()) {
                     Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
                 } else {
-                    ModelQuestion newQ = new ModelQuestion(0, 0, title, description, null);
+                    ModelQuestion newQ = new ModelQuestion(0, 0, title, description, "", null);
                     questions.add(newQ);
                     dataToSubmit.add(newQ);
                     adapter.notifyDataSetChanged();
@@ -272,7 +273,9 @@ public class FragmentEditQuestionnaire extends Fragment
         questions.addAll(Arrays.asList(data));
         dataToSubmit.addAll(Arrays.asList(data));
 
-        adapter.notifyDataSetChanged();
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**

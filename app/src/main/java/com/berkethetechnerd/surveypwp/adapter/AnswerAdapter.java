@@ -3,8 +3,6 @@ package com.berkethetechnerd.surveypwp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +11,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.berkethetechnerd.surveypwp.R;
-import com.berkethetechnerd.surveypwp.model.ModelAnswer;
+import com.berkethetechnerd.surveypwp.model.ModelQuestion;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
+public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
 
     // The container list.
-    private ArrayList<ModelAnswer> dataSet;
+    private ArrayList<ModelQuestion> dataSet;
 
     // The context that the adapter will work on.
     private Context context;
@@ -42,7 +40,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
         }
     }
 
-    public AnswerAdapter(ArrayList<ModelAnswer> dataSet, Context context) {
+    public AnswerAdapter(ArrayList<ModelQuestion> dataSet, Context context) {
         super(context, R.layout.adapter_all_answers_row, dataSet);
 
         this.dataSet = dataSet;
@@ -61,8 +59,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        // The comment in the placement of the specific row.
-        ModelAnswer answer = getItem(position);
+        ModelQuestion question = getItem(position);
 
         /*
          * ViewHolder is used to avoid instantiating a view for every item in your adapter,
@@ -86,7 +83,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
         }
 
         // Sets the content of the view.
-        setViewContent(viewHolder, answer);
+        setViewContent(viewHolder, question);
         return convertView;
     }
 
@@ -94,13 +91,13 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
      * Fill view with its content.
      *
      * @param viewHolder,    the holder of view which will be displayed.
-     * @param answer:       The answer object which holds the content.
+     * @param question:       The answer object which holds the content.
      */
-    private void setViewContent(ViewHolder viewHolder, final ModelAnswer answer) {
-        if (answer != null) {
-            String title = answer.getTitle();
-            String description = answer.getDescription();
-            String content = answer.getAnswer();
+    private void setViewContent(ViewHolder viewHolder, final ModelQuestion question) {
+        if (question != null) {
+            String title = question.getTitle();
+            String description = question.getDescription();
+            String content = question.getContent();
 
             if(description == null || description.isEmpty()) {
                 description = "No description provided.";
@@ -108,22 +105,6 @@ public class AnswerAdapter extends ArrayAdapter<ModelAnswer> {
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
-            viewHolder.etAnswer.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    answer.setAnswer(s.toString());
-                }
-            });
 
             if(content != null && !content.isEmpty()) {
                 viewHolder.etAnswer.setText(content);

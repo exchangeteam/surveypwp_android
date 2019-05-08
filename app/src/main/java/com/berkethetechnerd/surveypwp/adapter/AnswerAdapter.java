@@ -1,6 +1,8 @@
 package com.berkethetechnerd.surveypwp.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.berkethetechnerd.surveypwp.R;
 import com.berkethetechnerd.surveypwp.model.ModelQuestion;
@@ -37,7 +40,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
     static class ViewHolder {
         @BindView(R.id.tv_answerQuestionTitle) TextView tvTitle;
         @BindView(R.id.tv_answerQuestionDescription) TextView tvDescription;
-        @BindView(R.id.et_answerContent) EditText etAnswer;
+        @BindView(R.id.et_answerContent) TextView etAnswer;
 
         private ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -109,33 +112,46 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
-            viewHolder.etAnswer.addTextChangedListener(new TextWatcher() {
+            viewHolder.etAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+                    LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 
-                }
+                    final View view = layoutInflater.inflate(R.layout.dialog_add_answer, null);
+                    alertDialog.setView(view);
+                    alertDialog.setTitle(getContext().getResources().getString(R.string.dialog_editQuestionnaireTitle));
+                    alertDialog.setMessage(getContext().getResources().getString(R.string.dialog_editQuestionMessage));
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    final EditText etAnswer = view.findViewById(R.id.et_newAnswerBox);
 
-                }
+                    alertDialog.setPositiveButton(getContext().getResources().getString(R.string.btn_answer), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String Qanswer = etAnswer.getText().toString();
+                            String msg = "Answer cannot be empty!";
 
-                @Override
-                public void afterTextChanged(Editable s) {
-                    question.setContent(s.toString());
+                            if(Qanswer.isEmpty()) {
+                                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+                            } else {
+                                question.setContent(Qanswer);
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+
+                    alertDialog.setNegativeButton(getContext().getResources().getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
                 }
             });
 
             if(content != null && !content.isEmpty()) {
                 viewHolder.etAnswer.setText(content);
-                viewHolder.etAnswer.setInputType(InputType.TYPE_NULL);
-                viewHolder.etAnswer.setTextIsSelectable(false);
-                viewHolder.etAnswer.setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        return false;
-                    }
-                });
             }
         }
     }

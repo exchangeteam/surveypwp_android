@@ -27,17 +27,16 @@
         android:textStyle="italic"
         android:textSize="@dimen/allQuestionnaireDescriptionTextSize"/>
 
-    <EditText
+    <TextView
         android:id="@+id/et_answerContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginS"
         android:layout_marginStart="@dimen/marginS"
         android:layout_marginEnd="@dimen/marginS"
-        android:inputType="textMultiLine"
-        android:minLines="1"
-        android:maxLines="3"
+        android:layout_marginBottom="@dimen/marginS"
         android:textStyle="italic"
-        android:hint="@string/hint_answer_content"/>
+        android:textSize="@dimen/allQuestionnaireDescriptionTextSize"
+        android:text="@string/hint_answer_content"/>
 
 </LinearLayout>

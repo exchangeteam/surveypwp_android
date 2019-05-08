@@ -22,6 +22,7 @@
     <string name="btn_cancel">Cancel</string>
     <string name="btn_edit">Edit</string>
     <string name="btn_delete">Delete</string>
+    <string name="btn_answer">Answer</string>
 
     <string name="hint_questionnaire_title">Title</string>
     <string name="hint_question_title">Title</string>
@@ -29,7 +30,7 @@
     <string name="hint_question_description">Description</string>
     <string name="hint_questionnaire_id">Questionnaire ID</string>
     <string name="hint_answer_username">Username</string>
-    <string name="hint_answer_content">Type your answer..</string>
+    <string name="hint_answer_content">Click here to add your answer</string>
 
     <string name="dialog_editQuestionnaireTitle">Edit questionnaire</string>
     <string name="dialog_editQuestionnaireMessage">Edit your questionnaire\'s title and description.</string>
@@ -41,4 +42,5 @@
     <string name="dialog_deleteQıestionnaireConfirmationMessage">Are you sure to delete this questionnaire? It will
         be removed our system entirely. If there is related questions and answers, they will also be deleted in a way
         unrecoverable!</string>
+    <string name="dialog_answerTitle">New answer</string>
 </resources>

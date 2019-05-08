@@ -3,6 +3,7 @@ package com.berkethetechnerd.surveypwp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -253,6 +254,14 @@ public class QuestionnaireActivity extends AppCompatActivity
             Qtitle = response.getTitle();
             Qdescription = response.getDescription();
 
+            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
+                    Qtitle, Qdescription, Qusername, Qid
+            );
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
+                    .commit();
+
             SurveyAPI.getQuestions(Qid, getOneQuestionnaireQuestionsUserSuccessListener, getOneQuestionnaireQuestionsUserErrorListener);
         }
     };
@@ -274,16 +283,12 @@ public class QuestionnaireActivity extends AppCompatActivity
     private Response.Listener<ApiResultAllQuestions> getOneQuestionnaireQuestionsUserSuccessListener = new Response.Listener<ApiResultAllQuestions>() {
         @Override
         public void onResponse(ApiResultAllQuestions response) {
-            FragmentAnswerQuestionnaire fragmentAnswerQuestionnaire = FragmentAnswerQuestionnaire.newInstance(
-                    Qtitle, Qdescription, Qusername, Qid
-            );
+            FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
 
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.questionnaire_content, fragmentAnswerQuestionnaire, TAG_ANSWER_QUESTIONNAIRE)
-                    .commit();
-
-            fragmentAnswerQuestionnaire.setQuestionData(response.getItems());
-            SurveyAPI.getUserAnswers(Qid, Qusername, getUserAnswersSuccessListener, getUserAnswersErrorListener);
+            if(fragment != null) {
+                fragment.setQuestionData(response.getItems());
+                SurveyAPI.getUserAnswers(Qid, Qusername, getUserAnswersSuccessListener, getUserAnswersErrorListener);
+            }
         }
     };
 
@@ -298,6 +303,7 @@ public class QuestionnaireActivity extends AppCompatActivity
         @Override
         public void onResponse(ApiResultAllAnswers response) {
             FragmentAnswerQuestionnaire fragment = (FragmentAnswerQuestionnaire) getSupportFragmentManager().findFragmentByTag(TAG_ANSWER_QUESTIONNAIRE);
+            Log.v("GOT THE ANSWER:", String.valueOf(response.getItems().length));
 
             if(fragment != null) {
                 fragment.setAnswerContent(response.getItems());

@@ -3,6 +3,10 @@ package com.berkethetechnerd.surveypwp.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +97,7 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
      * @param viewHolder,    the holder of view which will be displayed.
      * @param question:       The answer object which holds the content.
      */
-    private void setViewContent(ViewHolder viewHolder, final ModelQuestion question) {
+    private void setViewContent(final ViewHolder viewHolder, final ModelQuestion question) {
         if (question != null) {
             String title = question.getTitle();
             String description = question.getDescription();
@@ -105,9 +109,33 @@ public class AnswerAdapter extends ArrayAdapter<ModelQuestion> {
 
             viewHolder.tvTitle.setText(title);
             viewHolder.tvDescription.setText(description);
+            viewHolder.etAnswer.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    question.setContent(s.toString());
+                }
+            });
 
             if(content != null && !content.isEmpty()) {
                 viewHolder.etAnswer.setText(content);
+                viewHolder.etAnswer.setInputType(InputType.TYPE_NULL);
+                viewHolder.etAnswer.setTextIsSelectable(false);
+                viewHolder.etAnswer.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        return false;
+                    }
+                });
             }
         }
     }

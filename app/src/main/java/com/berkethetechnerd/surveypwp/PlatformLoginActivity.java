@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
+import com.berkethetechnerd.surveypwp.fragment.FragmentAnswerQuestionnaire;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToAnswer;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLogin;
 import com.berkethetechnerd.surveypwp.fragment.FragmentLoginToEdit;
+import com.berkethetechnerd.surveypwp.model.ApiResultAllAnswers;
 import com.berkethetechnerd.surveypwp.model.ApiResultOneQuestionnaire;
 import com.berkethetechnerd.surveypwp.ws.SurveyAPI;
 
@@ -106,13 +109,7 @@ public class PlatformLoginActivity extends AppCompatActivity
         Qusername = username;
         Qid = id;
 
-        Intent answerOfUserIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
-        answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_SEE_ANSWER_OF_USER);
-        answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME, username);
-        answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, id);
-
-        startActivity(answerOfUserIntent);
-        finish();
+        SurveyAPI.getOneQuestionnaire(id, answerUserSuccessListener, answerUserErrorListener);
     }
 
     private Response.Listener<ApiResultOneQuestionnaire> editSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
@@ -153,6 +150,51 @@ public class PlatformLoginActivity extends AppCompatActivity
         public void onErrorResponse(VolleyError error) {
             String msg = "The questionnaire does not exist!";
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private Response.Listener<ApiResultOneQuestionnaire> answerUserSuccessListener = new Response.Listener<ApiResultOneQuestionnaire>() {
+        @Override
+        public void onResponse(ApiResultOneQuestionnaire response) {
+            SurveyAPI.getUserAnswers(Qid, Qusername, getUserAnswersSuccessListener, getUserAnswersErrorListener);
+        }
+    };
+
+    private Response.ErrorListener answerUserErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            String msg = "The questionnaire does not exist!";
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private Response.Listener<ApiResultAllAnswers> getUserAnswersSuccessListener = new Response.Listener<ApiResultAllAnswers>() {
+        @Override
+        public void onResponse(ApiResultAllAnswers response) {
+            Intent answerOfUserIntent = new Intent(PlatformLoginActivity.this, QuestionnaireActivity.class);
+            answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_TAG, INTENT_SEE_ANSWER_OF_USER);
+            answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_USERNAME, Qusername);
+            answerOfUserIntent.putExtra(INTENT_QUESTIONNAIRE_EXTRA_ID, Qid);
+
+            startActivity(answerOfUserIntent);
+            finish();
+        }
+    };
+
+    private Response.ErrorListener getUserAnswersErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            int errorCode = error.networkResponse.statusCode;
+
+            if(errorCode == 405) {
+                String msg = "The user does not exist for this questionnaire!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            } else if(errorCode == 404) {
+                String msg = "The questionnaire does not exist!";
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+
+            finish();
         }
     };
 }

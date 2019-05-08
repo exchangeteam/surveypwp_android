@@ -198,7 +198,7 @@ public class SurveyAPI {
         JSONObject JRequestObject = new JSONObject();
         try {
             JRequestObject.put("content", answer);
-            JRequestObject.put("unique_name", username);
+            JRequestObject.put("userName", username);
         } catch (JSONException e) {
             e.printStackTrace();
         }
